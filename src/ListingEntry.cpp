@@ -5,6 +5,13 @@ ListingEntry::ListingEntry()
 {
     //ctor
     this->errorFlag = false;
+    this->address = "";
+    this->errorMsg = "";
+    this->label = "";
+    this->opCode = "";
+    this->operand = "";
+    this->lineNumber = 0;
+    this->comment = "";
 }
 
 ListingEntry::~ListingEntry()

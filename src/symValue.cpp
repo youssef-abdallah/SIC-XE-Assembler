@@ -2,7 +2,8 @@
 
 symValue::symValue()
 {
-    //ctor
+    this->address = "";
+    this->length = 0;
 }
 
 symValue::~symValue()
