@@ -1,0 +1,77 @@
+# depslib dependency file v1.0
+1556227235 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\main.cpp
+	<iostream>
+	<string>
+	"ListingEntry.h"
+	<unordered_map>
+	<unordered_set>
+	"Pass1Algorithm.h"
+	"symValue.h"
+
+1556212181 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\listingentry.h
+	<string>
+	"globals.h"
+
+1556224586 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\listingentry.cpp
+	"ListingEntry.h"
+	<string>
+
+1556210636 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\parser.cpp
+	"Parser.h"
+	<algorithm>
+
+1556212044 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\parser.h
+	<string>
+	<sstream>
+	"globals.h"
+
+1556206746 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\symvalue.cpp
+	"symValue.h"
+
+1556222762 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\symvalue.h
+	<string>
+	<globals.h>
+
+1556211781 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\static.h
+
+1556211406 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\static.cpp
+	"Static.h"
+
+1556223139 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\globals.h
+	<unordered_map>
+	<unordered_set>
+	"symValue.h"
+
+1556214237 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\instructionvalidator.cpp
+	"InstructionValidator.h"
+
+1556222633 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\instructionvalidator.h
+	<string>
+	<globals.h>
+
+1556224586 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\pass1algorithm.cpp
+	"Pass1Algorithm.h"
+	<iostream>
+
+1556223533 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\pass1algorithm.h
+	"Parser.h"
+	"globals.h"
+	"symValue.h"
+	"InstructionValidator.h"
+	"ListingEntry.h"
+	<vector>
+	<string>
+	<sstream>
+	<fstream>
+	<algorithm>
+	<unordered_map>
+
+1556225815 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\main.cpp
+	<iostream>
+	<string>
+	"ListingEntry.h"
+	<unordered_map>
+	<unordered_set>
+	"Pass1Algorithm.h"
+	"symValue.h"
+
