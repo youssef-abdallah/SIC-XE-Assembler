@@ -193,12 +193,14 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
                     else if (operand == ""){
                        entry.setErrorFlag(true);
                        entry.setErrorMsg("*** ERROR: missing operand field ***\n");
-                    } else if (symTable.count(operand) == 0){
+                    } else if (symTable.count(operand) == 0 && operand != "*"){
                         entry.setErrorFlag(true);
                         entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
                     } else {
-                        stringstream ss(symTable[operand].getAddress());
-                        ss >> std::hex >> locCounter;
+                        if (operand != "*") {
+                            stringstream ss(symTable[operand].getAddress());
+                            ss >> std::hex >> locCounter;
+                        }
                     }
                 } else if (mnemonic == "EQU"){
                     if (label == ""){
@@ -208,11 +210,12 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
                     else if (operand == ""){
                        entry.setErrorFlag(true);
                        entry.setErrorMsg("*** ERROR: missing operand field ***\n");
-                    } else if(symTable.count(operand) == 0) {
+                    } else if(symTable.count(operand) == 0 && operand != "*") {
                        entry.setErrorFlag(true);
                        entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
                     } else {
-                        symTable[label] = symTable[operand];
+                        if (operand == "*") symTable[label] = incrementLocCounter(locCounter, 0);
+                        else symTable[label] = symTable[operand];
                     }
                 }
                 else if (mnemonic == "WORD" || mnemonic == "BYTE" || mnemonic == "RESW" || mnemonic == "RESB"){
