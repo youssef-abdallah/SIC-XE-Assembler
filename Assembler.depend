@@ -12,7 +12,7 @@
 	<string>
 	"globals.h"
 
-1556224586 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\listingentry.cpp
+1556229819 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\listingentry.cpp
 	"ListingEntry.h"
 	<string>
 
@@ -67,6 +67,15 @@
 	<unordered_map>
 
 1556225815 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\main.cpp
+	<iostream>
+	<string>
+	"ListingEntry.h"
+	<unordered_map>
+	<unordered_set>
+	"Pass1Algorithm.h"
+	"symValue.h"
+
+1556227235 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\pass1.cpp
 	<iostream>
 	<string>
 	"ListingEntry.h"

@@ -214,7 +214,9 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
                        entry.setErrorFlag(true);
                        entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
                     } else {
-                        if (operand == "*") symTable[label] = incrementLocCounter(locCounter, 0);
+                        symValue newValue;
+                        newValue.setAddress(incrementLocCounter(locCounter, 0));
+                        if (operand == "*") symTable[label] = newValue;
                         else symTable[label] = symTable[operand];
                     }
                 }
