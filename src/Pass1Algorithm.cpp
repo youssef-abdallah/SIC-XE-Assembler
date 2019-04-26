@@ -175,7 +175,6 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
                         entry.setErrorFlag(true);
                         entry.setErrorMsg("*** ERROR: this statement can't have a label ***\n");
                     }
-                    else entry.setErrorFlag(false);
                 } else if (mnemonic == "NOBASE"){
                     if (label != ""){
                         entry.setErrorFlag(true);
