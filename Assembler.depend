@@ -8,9 +8,10 @@
 	"Pass1Algorithm.h"
 	"symValue.h"
 
-1556212181 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\listingentry.h
+1556571787 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\listingentry.h
 	<string>
 	"globals.h"
+	<bitset>
 
 1556229819 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\listingentry.cpp
 	"ListingEntry.h"
@@ -25,7 +26,7 @@
 	<sstream>
 	"globals.h"
 
-1556206746 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\symvalue.cpp
+1556229876 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\symvalue.cpp
 	"symValue.h"
 
 1556222762 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\symvalue.h
@@ -37,7 +38,7 @@
 1556211406 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\static.cpp
 	"Static.h"
 
-1556223139 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\globals.h
+1556555899 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\globals.h
 	<unordered_map>
 	<unordered_set>
 	"symValue.h"
@@ -49,11 +50,11 @@
 	<string>
 	<globals.h>
 
-1556224586 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\pass1algorithm.cpp
+1556297759 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\pass1algorithm.cpp
 	"Pass1Algorithm.h"
 	<iostream>
 
-1556223533 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\pass1algorithm.h
+1556575877 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\pass1algorithm.h
 	"Parser.h"
 	"globals.h"
 	"symValue.h"
@@ -75,7 +76,7 @@
 	"Pass1Algorithm.h"
 	"symValue.h"
 
-1556227235 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\pass1.cpp
+1556575963 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\pass1.cpp
 	<iostream>
 	<string>
 	"ListingEntry.h"
@@ -83,4 +84,18 @@
 	<unordered_set>
 	"Pass1Algorithm.h"
 	"symValue.h"
+	"Pass2.h"
+
+1556657126 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\pass2.cpp
+	"Pass2.h"
+	<iostream>
+
+1556658476 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\pass2.h
+	<unordered_map>
+	<sstream>
+	"symValue.h"
+	<vector>
+	<regex>
+	"ListingEntry.h"
+	"globals.h"
 

@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="test.txt free" />
+				<Option parameters="test.txt fixed" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="include" />
@@ -39,6 +39,7 @@
 		<Unit filename="include/ListingEntry.h" />
 		<Unit filename="include/Parser.h" />
 		<Unit filename="include/Pass1Algorithm.h" />
+		<Unit filename="include/Pass2.h" />
 		<Unit filename="include/globals.h" />
 		<Unit filename="include/symValue.h" />
 		<Unit filename="pass1.cpp" />
@@ -46,6 +47,7 @@
 		<Unit filename="src/ListingEntry.cpp" />
 		<Unit filename="src/Parser.cpp" />
 		<Unit filename="src/Pass1Algorithm.cpp" />
+		<Unit filename="src/Pass2.cpp" />
 		<Unit filename="src/symValue.cpp" />
 		<Extensions>
 			<code_completion />

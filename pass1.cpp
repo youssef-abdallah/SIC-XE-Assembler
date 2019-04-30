@@ -5,12 +5,14 @@
 #include <unordered_set>
 #include "Pass1Algorithm.h"
 #include "symValue.h"
+#include "Pass2.h"
 
 using namespace std;
 unordered_map<string, symValue> symTable;
 unordered_map<string, string> opTab;
 unordered_map<string, int> instructionFormat;
-unordered_set<string> directives, registerSet;
+unordered_set<string> directives;
+unordered_map<string, int> registerSet;
 
 void initializeOpTabAndInstructionFormat()
 {
@@ -101,14 +103,14 @@ void initializeOpTabAndInstructionFormat()
     directives.insert("RESB");
     directives.insert("ORG");
     directives.insert("EQU");
-    registerSet.insert("A");
-    registerSet.insert("X");
-    registerSet.insert("S");
-    registerSet.insert("T");
-    registerSet.insert("L");
-    registerSet.insert("B");
-    registerSet.insert("PC");
-    registerSet.insert("SW");
+    registerSet["A"] = 0;
+    registerSet["X"] = 1;
+    registerSet["L"] = 2;
+    registerSet["B"] = 3;
+    registerSet["S"] = 4;
+    registerSet["T"] = 5;
+    registerSet["PC"] = 8;
+    registerSet["SW"] = 9;
 
 }
 
@@ -120,5 +122,9 @@ int main(int argc, char *argv[])
     Pass1Algorithm pass1;
     string freeFormat(argv[2]);
     pass1.execute(argv[1], freeFormat == "free");
+    Pass2 pass2;
+    pass2.SetListingTable(pass1.getListingTable());
+    pass2.SetSymTable(pass1.getSymTable());
+    pass2.execute();
     return 0;
 }

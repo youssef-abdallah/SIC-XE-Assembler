@@ -7,7 +7,7 @@
 
 using namespace std;
 extern unordered_map<string, string> opTab;
-extern unordered_map<string, int> instructionFormat;
-extern unordered_set<string> directives, registerSet;
+extern unordered_map<string, int> instructionFormat, registerSet;
+extern unordered_set<string> directives;
 
 #endif /* INCLUDED_GLOBALS_H */

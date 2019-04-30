@@ -23,6 +23,7 @@ class Pass1Algorithm
         void execute(string fileName, bool freeFormat);
         void writeListingFile(string fileName);
         unordered_map<string, symValue> getSymTable() { return symTable; }
+        vector<ListingEntry> getListingTable() { return listingTable; }
 
     protected:
 

@@ -1,28 +1,46 @@
-.234567890123456789
-LAB2C    START   1000
-         LDA              ALPHA
-         LDB     #10
-             LDX     #0
-         ADDR    A,B
-         STA     SAVEW,X
-          LDX     #1
-         STA     SAVEW,X
-.Format 4
-         +SUB                 #12
+.2345678901234567890
+         START   0000
+BGN      JSUB    READ
+         JSUB    TOUPP
          LDX     #0
-         LDCH    HEXCHAR
-         STA     INPUT
-LOOP     LDCH    STRING,X
-         COMP    INPUT
-         JEQ     FOUND
-         STCH    OUTPUT,X
-         TIX     #5
-         JLT     LOOP
-     FOUND    J       OUT
-ALPHA    WORD    2
-SAVEW    RESW    2
-HEXCHAR  BYTE        X'61'
-INPUT     RESB    1
-STRING   BYTE    C'String'
-OUTPUT   RESB    5
-OUT      END
+LOOP     JSUB    WRITE
+         TIX     LENGTH
+         JLT     LOOP       
+         J       *
+MAXN     WORD    10
+LENGTH   RESW    1
+STR      RESB    10
+INDEV    BYTE    X'F3'
+OUTDEV   BYTE    X'05'
+EOF      BYTE    C'EOF'
+.SUBROUTINE TO READ FROM DEVICE
+READ     LDX     #0
+         LDA     #0
+RLOOP    TD      INDEV
+         JEQ     RLOOP
+         RD      INDEV
+         COMP    #4
+         COMPR   A,S
+         JEQ     EXIT
+         STCH    STR,X
+         TIX     MAXN
+         JLT     RLOOP
+EXIT     STX     LENGTH
+         RSUB
+.SUBROUTINE TO CONVERT TO UPPER CASE
+TOUPP    LDX     #0
+LOOP1    LDA     #0
+         LDCH    STR,X
+         SUB     #32
+         STCH    STR,X
+         TIX     LENGTH
+         JLT     LOOP1
+         RSUB
+.SUBROUTINE TO WRITE ONE CHAR TO A DEVICE
+WRITE    J       WLOOP
+WLOOP    TD      OUTDEV
+         JEQ     WLOOP
+         LDCH    STR,X
+         WD      OUTDEV
+         RSUB
+         END     BGN
