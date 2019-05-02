@@ -4,10 +4,12 @@
 Pass2::Pass2()
 {
     //ctor
+    baseDirective = 0;
 }
 
 Pass2::Pass2(unordered_map<string, symValue> symTable){
     this->symTable = symTable;
+    baseDirective = 0;
 }
 
 Pass2::~Pass2()
@@ -21,6 +23,13 @@ void Pass2::execute(){
         string label = instruction.getLabel();
         string operand = instruction.getOperand();
         int format = instructionFormat[mnemonic];
+        if (mnemonic == "BASE"){
+            baseDirective = 1;
+        }
+        if (mnemonic == "NOBASE"){
+            baseDirective = 0;
+        }
+        programCounter = strToInt(baseConverter(16, 10, instruction.getAddress(), 5)) + 3;
         switch (format){
             case 1:
                 break;
@@ -40,6 +49,7 @@ void Pass2::execute(){
                     objectCode += intToHex(registerSet[registers[0]], 1);
                     objectCode += intToHex(registerSet[registers[1]], 1);
                     instruction.setObjectCode(objectCode);
+                    cout << mnemonic << " " << operand << " " << objectCode << endl;
                 } else {
                     //error
                 }
@@ -47,47 +57,78 @@ void Pass2::execute(){
                 break;
             case 3:
             {   regex hashNumeric("^(#\\d+)$");
+                string objectCode = "";
                 if (matchRegex(operand, hashNumeric)){
                     int number = strToInt(operand.substr(1, operand.size() - 1));
                     if (number >= 0 && number <= 4095){
                         string flags = "010000";
                         bitset<6> bs(flags);
                         instruction.setFlags(bs);
-                        string objectCode = "";
                         objectCode += hexDigitToBits(opTab[mnemonic][0], 4);
                         objectCode += hexDigitToBits(opTab[mnemonic][1], 2);
                         objectCode += flags;
                         objectCode += baseConverter(10, 2, operand.substr(1, operand.size() - 1), 12);
                         objectCode = baseConverter(2, 16, objectCode, 6);
-                        //cout << mnemonic << " " << operand << " " << objectCode << endl;
 
                     } else if (number >= 4096 && number <= 1048575 && mnemonic[0] == '+'){
                         string flags = "010001";
                         bitset<6> bs(flags);
                         instruction.setFlags(bs);
-                        string objectCode = "";
                         objectCode += hexDigitToBits(opTab[mnemonic][0], 4);
                         objectCode += hexDigitToBits(opTab[mnemonic][1], 2);
                         objectCode += flags;
                         objectCode += baseConverter(10, 2, operand.substr(1, operand.size() - 1), 20);
-                        objectCode = baseConverter(2, 16, objectCode, 6);
+                        objectCode = baseConverter(2, 16, objectCode, 8);
                     } else {
                         // error number out of range
                     }
                 } else if (operand != ""){
+                    int targetAddress = strToInt(baseConverter(16, 10, symTable[operand].getAddress(), 5));
                     if (mnemonic[0] == '+'){
                         string flags = "110001";
+                        adjustFlags(flags, operand);
                         bitset<6> bs(flags);
                         instruction.setFlags(bs);
-                        string objectCode = "";
                         objectCode += hexDigitToBits(opTab[mnemonic][0], 4);
                         objectCode += hexDigitToBits(opTab[mnemonic][1], 2);
                         objectCode += flags;
                         objectCode += baseConverter(10, 2, operand, 20);
+                        objectCode = baseConverter(2, 16, objectCode, 8);
+                    } else if (targetAddress - programCounter >= -2048
+                                && targetAddress - programCounter <= 2047){
+                        string flags = "110010";
+                        adjustFlags(flags, operand);
+                        bitset<6> bs(flags);
+                        instruction.setFlags(bs);
+                        objectCode += hexDigitToBits(opTab[mnemonic][0], 4);
+                        objectCode += hexDigitToBits(opTab[mnemonic][1], 2);
+                        objectCode += flags;
+                        int disp = targetAddress - programCounter >= 0 ? targetAddress - programCounter : (~(targetAddress - programCounter)) + 1;
+                        objectCode += baseConverter(10, 2, intToStr(disp), 12);
                         objectCode = baseConverter(2, 16, objectCode, 6);
+                    } else if (baseDirective && targetAddress - baseRegister >= 0
+                               && targetAddress - baseRegister <= 4095){
+                        string flags = "110100";
+                        adjustFlags(flags, operand);
+                        bitset<6> bs(flags);
+                        int disp = targetAddress - baseRegister;
+                        instruction.setFlags(bs);
+                        objectCode += hexDigitToBits(opTab[mnemonic][0], 4);
+                        objectCode += hexDigitToBits(opTab[mnemonic][1], 2);
+                        objectCode += flags;
+                        objectCode += baseConverter(10, 2, intToStr(disp), 12);
+                        objectCode = baseConverter(2, 16, objectCode, 6);
+                    } else {
+                        //error instruction addressing error
                     }
                 } else {
+                    string flags = "110000";
+                    bitset<6> bs(flags);
+                    instruction.setFlags(bs);
+                    objectCode = "4F0000";
                 }
+                instruction.setObjectCode(objectCode);
+                cout << mnemonic << " " << operand << " " << objectCode << endl;
             }
                 break;
 
@@ -193,4 +234,22 @@ int Pass2::strToInt(string s){
     int x;
     ss >> x;
     return x;
+}
+
+string Pass2::intToStr(int x){
+    stringstream ss;
+    ss << x;
+    return ss.str();
+}
+
+void Pass2::adjustFlags(string &flags, string operand){
+    if (operand[0] == '#'){
+        flags[0] = '0';
+    } else if (operand[0] == '@'){
+        flags[1] = '0';
+    }
+    if (operand.length() > 2 && operand.substr(operand.length() - 2, 2) == ",X"){
+        flags[2] = '1';
+    }
+    return;
 }

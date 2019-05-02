@@ -27,8 +27,12 @@ class Pass2
         string intToHex(int, int);
         bool matchRegex(string, regex);
         int strToInt(string);
+        string intToStr(int);
         string baseConverter(int base1, int base2, string s1, int len);
         string hexDigitToBits(char hexDigit, int len);
+        int programCounter, baseRegister;
+        bool baseDirective;
+        void adjustFlags(string &flags, string operand);
 };
 
 #endif // PASS2_H
