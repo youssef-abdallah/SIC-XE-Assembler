@@ -1,46 +1,49 @@
 .2345678901234567890
-         START   0000
-BGN      JSUB    READ
-         JSUB    TOUPP
-         LDX     #0
-LOOP     JSUB    WRITE
-         TIX     LENGTH
-         JLT     LOOP       
-         J       *
-MAXN     WORD    10
-LENGTH   RESW    1
-STR      RESB    10
-INDEV    BYTE    X'F3'
-OUTDEV   BYTE    X'05'
+COPY     START   0000
+FIRST    STL     RETADR
+         LDB     #LENGTH
+	 BASE    LENGTH
+CLOOP    +JSUB   RDREC
+    	 LDA     LENGTH
+         COMP    #0
+         JEQ     ENDFIL
+         +JSUB   WRREC
+         J       CLOOP
+ENDFIL   LDA     EOF
+         STA     BUFFER
+         LDA     #3
+         STA     LENGTH
+         +JSUB   WRREC
+         J       @RETADR
 EOF      BYTE    C'EOF'
-.SUBROUTINE TO READ FROM DEVICE
-READ     LDX     #0
-         LDA     #0
-RLOOP    TD      INDEV
+RETADR   RESW    1
+LENGTH   RESW    1
+BUFFER   RESB    4096
+.
+.SUBROUTINE TO READ INTO BUFFER
+RDREC    CLEAR   X
+         CLEAR   A
+         CLEAR   S
+         +LDA    #4096
+RLOOP    TD      INPUT
          JEQ     RLOOP
-         RD      INDEV
-         COMP    #4
+         TD      INPUT
          COMPR   A,S
          JEQ     EXIT
-         STCH    STR,X
-         TIX     MAXN
+         STCH    BUFFER,X
+         TIXR    T
          JLT     RLOOP
 EXIT     STX     LENGTH
          RSUB
-.SUBROUTINE TO CONVERT TO UPPER CASE
-TOUPP    LDX     #0
-LOOP1    LDA     #0
-         LDCH    STR,X
-         SUB     #32
-         STCH    STR,X
-         TIX     LENGTH
-         JLT     LOOP1
-         RSUB
-.SUBROUTINE TO WRITE ONE CHAR TO A DEVICE
-WRITE    J       WLOOP
-WLOOP    TD      OUTDEV
+INPUT    BYTE    X'F1'
+WRREC    CLEAR   X
+         LDT     LENGTH
+WLOOP    TD      OUTPUT
          JEQ     WLOOP
-         LDCH    STR,X
-         WD      OUTDEV
+         LDCH    BUFFER,X
+         WD      OUTPUT
+         TIXR    T
+         JLT     WLOOP
          RSUB
-         END     BGN
+OUTPUT   BYTE    X'05'
+         END     FIRST

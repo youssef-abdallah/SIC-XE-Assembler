@@ -298,7 +298,7 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
                 entry.setOperand(operand);
                 if (mnemonic[0] == '+'){  // if format 4
                     mnemonic = mnemonic.substr(1, mnemonic.length() - 1);
-                    entry.setOpCode(mnemonic);
+                    entry.setOpCode("+" + mnemonic);
                     if (instructionFormat[mnemonic] != 3){
                         entry.setErrorFlag(true);
                         entry.setErrorMsg("*** ERROR: instruction cannot be format 4 ***\n");
@@ -309,15 +309,25 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
                 } else {
                     entry.setOpCode(mnemonic);
                     if (instructionFormat[mnemonic] == 2){
-                        vector<string> tokens = tokenize(operand, ',');
-                        if (tokens.size() < 2){
-                            entry.setErrorFlag(true);
-                            entry.setErrorMsg("*** ERROR: missing comma in operand field ***\n");
-                        } else if(!registerSet.count(tokens[0]) || !registerSet.count(tokens[1])) {
-                            entry.setErrorFlag(true);
-                            entry.setErrorMsg("*** ERROR: illegal address for a register ***\n");
-                        } else {
-                            incrementLocCounter(locCounter, 2);
+                        if (mnemonic == "TIXR" || mnemonic == "CLEAR"){
+                            if (!registerSet.count(operand)){
+                                entry.setErrorFlag(true);
+                                entry.setErrorMsg("*** ERROR: illegal address for a register ***\n");
+                            } else {
+                                incrementLocCounter(locCounter, 2);
+                            }
+                        }
+                        else {
+                            vector<string> tokens = tokenize(operand, ',');
+                            if (tokens.size() < 2){
+                                entry.setErrorFlag(true);
+                                entry.setErrorMsg("*** ERROR: missing comma in operand field ***\n");
+                            } else if(!registerSet.count(tokens[0]) || !registerSet.count(tokens[1])) {
+                                entry.setErrorFlag(true);
+                                entry.setErrorMsg("*** ERROR: illegal address for a register ***\n");
+                            } else {
+                                incrementLocCounter(locCounter, 2);
+                            }
                         }
                     } else if (instructionFormat[mnemonic] == 3){
                         incrementLocCounter(locCounter, 3);
