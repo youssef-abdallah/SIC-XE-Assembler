@@ -215,6 +215,7 @@ void Pass2::execute()
 
         }
     }
+    makeObjectProgram();
 }
 
 string Pass2::baseConverter(int base1, int base2, string s1, int len)
@@ -349,4 +350,68 @@ void Pass2::adjustFlags(string &flags, string operand)
         flags[2] = '1';
     }
     return;
+}
+
+void Pass2::makeObjectProgram(){
+    string H = "H^";
+    string T = "";
+    string E = "E^";
+    int recordLength = 0;
+    int totalLength = 0;
+    string objectCodes = "";
+    string hexaLen;
+    bool addressFlag = true;
+    string startAddress;
+    string endAddress;
+
+    for (ListingEntry &instruction : listingTable){
+            string address = "00" + instruction.getAddress();
+        if (instruction.getOpCode() == "START"){
+                // need to handle spaces and program length
+            startAddress = instruction.getAddress();
+            endAddress = startAddress;
+            string progName = instruction.getLabel();
+            progName = addSpaces(progName, 6);
+            H += progName + "^" + address + "^" ;
+            E += address;
+        } else if (instruction.getOpCode() != "BASE" && instruction.getOpCode() != "NOBASE"){
+            if (instruction.getObjectCode() == "" && instruction.getOpCode() != "END"){
+                continue;
+            }
+            if (addressFlag){
+                T += "T^" + address;
+                addressFlag = false;
+            }
+            recordLength += instruction.getObjectCode().length();
+            if (recordLength <= 60 && instruction.getOpCode() != "END"){
+                objectCodes += "^" + instruction.getObjectCode();
+            } else {
+                recordLength -= instruction.getObjectCode().length();
+                string s = intToStr(recordLength / 2);
+                hexaLen = baseConverter(10, 16, s, 2);
+                T += "^" + hexaLen + objectCodes + "\n";
+                addressFlag = true;
+                recordLength = instruction.getObjectCode().length();
+                objectCodes = "^" + instruction.getObjectCode();
+            }
+        }
+        if (instruction.getOpCode() == "END"){
+            endAddress = instruction.getAddress();
+        }
+
+    }
+    totalLength = strToInt(baseConverter(16, 10, endAddress, 5)) - strToInt(baseConverter(16, 10, startAddress, 5)) + 1;
+    string temp = intToStr(totalLength);
+    temp = baseConverter(10, 16, temp, 6);
+    H += temp;
+    cout << H  << "\n" << T << E << endl;
+}
+
+
+string Pass2::addSpaces(string s, int n){
+    string s2 = s;
+    for (int i = 0; i < (int)(n - s.length()); i++){
+        s2 += " ";
+    }
+    return s2;
 }

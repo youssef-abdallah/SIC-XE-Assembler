@@ -33,6 +33,8 @@ class Pass2
         int programCounter, baseRegister;
         bool baseDirective;
         void adjustFlags(string &flags, string operand);
+        void makeObjectProgram();
+        string addSpaces(string, int);
 };
 
 #endif // PASS2_H
