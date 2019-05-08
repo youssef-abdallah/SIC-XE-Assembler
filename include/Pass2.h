@@ -7,6 +7,7 @@
 #include <regex>
 #include "ListingEntry.h"
 #include "globals.h"
+#include <fstream>
 
 class Pass2
 {
@@ -16,7 +17,7 @@ class Pass2
         virtual ~Pass2();
         void SetSymTable(unordered_map<string, symValue> val) { symTable = val; }
         void SetListingTable(vector<ListingEntry> val) { listingTable = val; }
-        void execute();
+        void execute(string);
 
     protected:
 
@@ -36,6 +37,8 @@ class Pass2
         void makeObjectProgram();
         string addSpaces(string, int);
         int getTwosComplement(int);
+        void writeListingFile(string);
+        void padTo(std::string &str, const size_t num, const char paddingChar = ' ');
 };
 
 #endif // PASS2_H

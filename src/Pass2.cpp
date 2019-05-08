@@ -18,7 +18,7 @@ Pass2::~Pass2()
     //dtor
 }
 
-void Pass2::execute()
+void Pass2::execute(string fileName)
 {
     for(ListingEntry &instruction : listingTable)
     {
@@ -136,7 +136,8 @@ void Pass2::execute()
                 }
                 else
                 {
-                    // error number out of range
+                    instruction.setErrorFlag(true);
+                    instruction.setErrorMsg("***Error: Number out of range!***");
                 }
             }
             else if (operand != "")
@@ -197,6 +198,8 @@ void Pass2::execute()
                 else
                 {
                     //error instruction addressing error
+                    instruction.setErrorFlag(true);
+                    instruction.setErrorMsg("***Error: Wrong operand (Addressing Problem)!***");
                 }
             }
             else
@@ -214,6 +217,7 @@ void Pass2::execute()
         }
     }
     makeObjectProgram();
+    writeListingFile(fileName);
 }
 
 string Pass2::baseConverter(int base1, int base2, string s1, int len)
@@ -418,4 +422,63 @@ int Pass2::getTwosComplement(int x){
     x = (~x) + 1;
     x &= 4095;
     return x;
+}
+
+void Pass2::writeListingFile(string fileName){
+    string spaces = "";
+    string s="";
+    bool successfullyAssembled=true;
+    padTo(spaces, 25);
+    fstream file;
+    file.open ((fileName.substr(0, fileName.length() - 4) + ".asm"),std::fstream::app);
+    file << spaces<<"**************************************************"<<endl;
+    file << spaces<<"********** S t a r t  o f  P a s s  II ***********"<<endl;
+    s="LC        Code      Label     Opcode    Operand     Flags\n";
+    file<<s<<endl;
+    for(auto it = listingTable.begin(); it != listingTable.end(); it++) {
+        ListingEntry entry = *it;
+        if(entry.getAddress()!=""&&!entry.getErrorFlag()){
+            string fl=entry.getFlags().to_string<char,std::string::traits_type,std::string::allocator_type>();;
+            s="n=";
+            s+=fl[0];
+            s+=" i=";
+            s+=fl[1];
+            s+=" x=";
+            s+=fl[2];
+            s+="   b=";
+            s+=fl[3];
+            s+=" p=";
+            s+=fl[4];
+            s+=" e=";
+            s+=fl[5];
+            padTo(s,12+s.length()-entry.getOpCode().length());
+            s=entry.getOpCode()+s;
+            padTo(s,10+s.length()-entry.getOperand().length());
+            s=entry.getOperand()+s;
+            padTo(s,10+s.length()-entry.getLabel().length());
+            s=entry.getLabel()+s;
+            padTo(s,10+s.length()-entry.getObjectCode().length());
+            s=entry.getObjectCode()+s;
+            padTo(s,10+s.length()-entry.getAddress().length());
+            s=entry.getAddress()+s;
+            //padTo(s,s.length()-3);
+            //s=entry.getLineNumber().to_string()+s;
+        file<<s<<endl;
+        file<<endl;}
+        if(entry.getErrorFlag()){
+            successfullyAssembled=false;
+            file << spaces<<entry.getErrorMsg()<<endl;
+        }
+    }
+    if(successfullyAssembled){
+        file << spaces<<"***** S U C C E S S F U L L Y  A S S E M B L E D ****"<<endl;
+    }else{
+        file << spaces<<"***** U N S U C C E S S F U L L Y  A S S E M B L Y ****"<<endl;
+    }
+    file.close();
+}
+
+void Pass2::padTo(std::string &str, const size_t num, const char paddingChar){
+    if(num > str.size())
+        str.insert(0, num - str.size(), paddingChar);
 }

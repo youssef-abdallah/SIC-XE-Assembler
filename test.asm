@@ -14,7 +14,7 @@ line no.    Address          Label          Mnemonic          Operands          
 13          001D                               STA               BUFFER            
 14          0020                               LDA               #3                
 15          0023                               STA               LENGTH            
-16          0026                               +JSUB             WRREC             
+16          0026                               +JSUB             WRRECC            
 17          002A                               J                 @RETADR           
 18          002D             EOF               BYTE              C'EOF'            
 19          0030             RETADR            RESW              1                 
@@ -68,3 +68,100 @@ line no.    Address          Label          Mnemonic          Operands          
           WRREC               105D
           RLOOP               1040
           EXIT                1056
+                         **************************************************
+                         ********** S t a r t  o f  P a s s  II ***********
+LC        Code      Label     Opcode    Operand     Flags
+
+0000                COPY      0000      START       n=0 i=0 x=0   b=0 p=0 e=0
+
+0000      17202D    FIRST     RETADR    STL         n=1 i=1 x=0   b=0 p=1 e=0
+
+0003      69202D              #LENGTH   LDB         n=0 i=1 x=0   b=0 p=1 e=0
+
+0006                          LENGTH    BASE        n=0 i=0 x=0   b=0 p=0 e=0
+
+0006      4B101036  CLOOP     RDREC     +JSUB       n=1 i=1 x=0   b=0 p=0 e=1
+
+000A      032026              LENGTH    LDA         n=1 i=1 x=0   b=0 p=1 e=0
+
+000D      290000              #0        COMP        n=0 i=1 x=0   b=0 p=0 e=0
+
+0010      332007              ENDFIL    JEQ         n=1 i=1 x=0   b=0 p=1 e=0
+
+0013      4B10105D            WRREC     +JSUB       n=1 i=1 x=0   b=0 p=0 e=1
+
+0017      3F2FEC              CLOOP     J           n=1 i=1 x=0   b=0 p=1 e=0
+
+001A      032010    ENDFIL    EOF       LDA         n=1 i=1 x=0   b=0 p=1 e=0
+
+001D      0F2016              BUFFER    STA         n=1 i=1 x=0   b=0 p=1 e=0
+
+0020      010003              #3        LDA         n=0 i=1 x=0   b=0 p=0 e=0
+
+0023      0F200D              LENGTH    STA         n=1 i=1 x=0   b=0 p=1 e=0
+
+0026      4B100000            WRRECC    +JSUB       n=1 i=1 x=0   b=0 p=0 e=1
+
+002A      3E2003              @RETADR   J           n=1 i=0 x=0   b=0 p=1 e=0
+
+002D      454F46    EOF       C'EOF'    BYTE        n=0 i=0 x=0   b=0 p=0 e=0
+
+0030                RETADR    1         RESW        n=0 i=0 x=0   b=0 p=0 e=0
+
+0033                LENGTH    1         RESW        n=0 i=0 x=0   b=0 p=0 e=0
+
+0036                BUFFER    4096      RESB        n=0 i=0 x=0   b=0 p=0 e=0
+
+1036      B410      RDREC     X         CLEAR       n=0 i=0 x=0   b=0 p=0 e=0
+
+1038      B400                A         CLEAR       n=0 i=0 x=0   b=0 p=0 e=0
+
+103A      B440                S         CLEAR       n=0 i=0 x=0   b=0 p=0 e=0
+
+103C      75101000            #4096     +LDT        n=0 i=1 x=0   b=0 p=0 e=1
+
+1040      E32019    RLOOP     INPUT     TD          n=1 i=1 x=0   b=0 p=1 e=0
+
+1043      332FFA              RLOOP     JEQ         n=1 i=1 x=0   b=0 p=1 e=0
+
+1046      E32013              INPUT     TD          n=1 i=1 x=0   b=0 p=1 e=0
+
+1049      A004                A,S       COMPR       n=0 i=0 x=0   b=0 p=0 e=0
+
+104B      332008              EXIT      JEQ         n=1 i=1 x=0   b=0 p=1 e=0
+
+104E      57C003              BUFFER,X  STCH        n=1 i=1 x=1   b=1 p=0 e=0
+
+1051      B850                T         TIXR        n=0 i=0 x=0   b=0 p=0 e=0
+
+1053      3B2FEA              RLOOP     JLT         n=1 i=1 x=0   b=0 p=1 e=0
+
+1056      134000    EXIT      LENGTH    STX         n=1 i=1 x=0   b=1 p=0 e=0
+
+1059      4F0000                        RSUB        n=1 i=1 x=0   b=0 p=0 e=0
+
+105C      F1        INPUT     X'F1'     BYTE        n=0 i=0 x=0   b=0 p=0 e=0
+
+105D      B410      WRREC     X         CLEAR       n=0 i=0 x=0   b=0 p=0 e=0
+
+105F      774000              LENGTH    LDT         n=1 i=1 x=0   b=1 p=0 e=0
+
+1062      E32011    WLOOP     OUTPUT    TD          n=1 i=1 x=0   b=0 p=1 e=0
+
+1065      332FFA              WLOOP     JEQ         n=1 i=1 x=0   b=0 p=1 e=0
+
+1068      53C003              BUFFER,X  LDCH        n=1 i=1 x=1   b=1 p=0 e=0
+
+106B      DF2008              OUTPUT    WD          n=1 i=1 x=0   b=0 p=1 e=0
+
+106E      B850                T         TIXR        n=0 i=0 x=0   b=0 p=0 e=0
+
+1070      3B2FEF              WLOOP     JLT         n=1 i=1 x=0   b=0 p=1 e=0
+
+1073      4F0000                        RSUB        n=1 i=1 x=0   b=0 p=0 e=0
+
+1076      05        OUTPUT    X'05'     BYTE        n=0 i=0 x=0   b=0 p=0 e=0
+
+1077                          FIRST     END         n=0 i=0 x=0   b=0 p=0 e=0
+
+                         ***** S U C C E S S F U L L Y  A S S E M B L E D ****
