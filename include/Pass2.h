@@ -35,6 +35,7 @@ class Pass2
         void adjustFlags(string &flags, string operand);
         void makeObjectProgram();
         string addSpaces(string, int);
+        int getTwosComplement(int);
 };
 
 #endif // PASS2_H

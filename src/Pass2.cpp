@@ -69,17 +69,11 @@ void Pass2::execute()
             break;
         case 2:
         {
-            regex re("[,]+");
-            if (matchRegex(operand, re))
+            if (operand[1] == ',')
             {
-                sregex_token_iterator it(operand.begin(), operand.end(), re, -1);
-                sregex_token_iterator reg_end;
                 vector<string> registers;
-                while(it != reg_end)
-                {
-                    registers.push_back(it->str());
-                    it++;
-                }
+                registers.push_back(string(1, operand[0]));
+                registers.push_back(string(1, operand[2]));
                 if (registers.size() == 2)
                 {
                     string objectCode = "";
@@ -94,8 +88,8 @@ void Pass2::execute()
             {
                 string objectCode = "";
                 objectCode += "B8";
-                objectCode += baseConverter(10, 16, intToStr(registerSet["X"]), 1);
                 objectCode += baseConverter(10, 16, intToStr(registerSet[operand]), 1);
+                objectCode += baseConverter(10, 16, intToStr(0), 1);
                 instruction.setObjectCode(objectCode);
                 cout << mnemonic << " " << operand << " " << objectCode << endl;
             }
@@ -152,6 +146,10 @@ void Pass2::execute()
                 {
                     targetAddress = strToInt(baseConverter(16, 10, symTable[operand.substr(1, operand.size() - 1)].getAddress(), 5));
                 }
+                else if (operand.substr(operand.length() - 2, 2) == ",X")
+                {
+                    targetAddress = strToInt(baseConverter(16, 10, symTable[operand.substr(0, operand.size() - 2)].getAddress(), 5));
+                }
                 else
                 {
                     targetAddress = strToInt(baseConverter(16, 10, symTable[operand].getAddress(), 5));
@@ -178,7 +176,7 @@ void Pass2::execute()
                     objectCode += hexDigitToBits(opTab[mnemonic][0], 4);
                     objectCode += hexDigitToBits(opTab[mnemonic][1], 2);
                     objectCode += flags;
-                    int disp = targetAddress - programCounter >= 0 ? targetAddress - programCounter : (~(targetAddress - programCounter)) + 1;
+                    int disp = targetAddress - programCounter >= 0 ? targetAddress - programCounter : getTwosComplement(programCounter - targetAddress);
                     objectCode += baseConverter(10, 2, intToStr(disp), 12);
                     objectCode = baseConverter(2, 16, objectCode, 6);
                 }
@@ -414,4 +412,10 @@ string Pass2::addSpaces(string s, int n){
         s2 += " ";
     }
     return s2;
+}
+
+int Pass2::getTwosComplement(int x){
+    x = (~x) + 1;
+    x &= 4095;
+    return x;
 }

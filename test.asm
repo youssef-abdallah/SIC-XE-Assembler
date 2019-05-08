@@ -25,7 +25,7 @@ line no.    Address          Label          Mnemonic          Operands          
 24          1036             RDREC             CLEAR             X                 
 25          1038                               CLEAR             A                 
 26          103A                               CLEAR             S                 
-27          103C                               +LDA              #4096             
+27          103C                               +LDT              #4096             
 28          1040             RLOOP             TD                INPUT             
 29          1043                               JEQ               RLOOP             
 30          1046                               TD                INPUT             
