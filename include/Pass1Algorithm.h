@@ -38,6 +38,8 @@ class Pass1Algorithm
         string incrementLocCounter(int &locCounter, int inc);
         void padTo(std::string &str, const size_t num, const char paddingChar = ' ');
         unordered_map<string, symValue> symTable;
+        string baseConverter(int base1, int base2, string s1, int len);
+
 };
 
 #endif // PASS1ALGORITHM_H

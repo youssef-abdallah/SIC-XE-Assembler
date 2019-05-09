@@ -3,12 +3,15 @@ COPY     START   0000
 FIRST    STL     RETADR
          LDB     #LENGTH
 	 BASE    LENGTH
+l1       word    100
+l2       word    50
 CLOOP    +JSUB   RDREC
     	 LDA     LENGTH
          COMP    #0
          JEQ     ENDFIL
          +JSUB   WRREC
          J       CLOOP
+         org     l2-l1
 ENDFIL   LDA     EOF
          STA     BUFFER
          LDA     #3
@@ -46,4 +49,6 @@ WLOOP    TD      OUTPUT
          JLT     WLOOP
          RSUB
 OUTPUT   BYTE    X'05'
+op       Equ     l2-l1
          END     FIRST
+.

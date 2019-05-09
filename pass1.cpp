@@ -6,6 +6,7 @@
 #include "Pass1Algorithm.h"
 #include "symValue.h"
 #include "Pass2.h"
+#include "Expression.h"
 
 using namespace std;
 unordered_map<string, symValue> symTable;
@@ -118,6 +119,7 @@ void initializeOpTabAndInstructionFormat()
 
 int main(int argc, char *argv[])
 {
+
     initializeOpTabAndInstructionFormat();
     Pass1Algorithm pass1;
     string freeFormat(argv[2]);
@@ -126,5 +128,14 @@ int main(int argc, char *argv[])
     pass2.SetListingTable(pass1.getListingTable());
     pass2.SetSymTable(pass1.getSymTable());
     pass2.execute();
-    return 0;
+
+
+    /*
+    Expression exp;
+    exp.Setaddress("0000");
+    exp.Setexpression("len+buf");
+    cout << exp.validate();
+    exp.evaluate();
+    */
+
 }

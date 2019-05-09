@@ -35,6 +35,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/Expression.h" />
 		<Unit filename="include/InstructionValidator.h" />
 		<Unit filename="include/ListingEntry.h" />
 		<Unit filename="include/Parser.h" />
@@ -43,6 +44,7 @@
 		<Unit filename="include/globals.h" />
 		<Unit filename="include/symValue.h" />
 		<Unit filename="pass1.cpp" />
+		<Unit filename="src/Expression.cpp" />
 		<Unit filename="src/InstructionValidator.cpp" />
 		<Unit filename="src/ListingEntry.cpp" />
 		<Unit filename="src/Parser.cpp" />

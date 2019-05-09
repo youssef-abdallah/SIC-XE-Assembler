@@ -1,5 +1,6 @@
 #include "Pass1Algorithm.h"
 #include <iostream>
+#include "Expression.h"
 
 Pass1Algorithm::Pass1Algorithm()
 {
@@ -185,6 +186,10 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
                         entry.setErrorMsg("*** ERROR: this statement can't have an operand ***\n");
                     }
                 } else if (mnemonic == "ORG"){
+                        Expression exp;
+                        exp.setLocctr(locCounter);
+                        exp.SetSymTable(symTable);
+                        exp.Setexpression(operand);
                    if (label != ""){
                         entry.setErrorFlag(true);
                         entry.setErrorMsg("*** ERROR: this statement can't have a label ***\n");
@@ -192,16 +197,31 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
                     else if (operand == ""){
                        entry.setErrorFlag(true);
                        entry.setErrorMsg("*** ERROR: missing operand field ***\n");
+                    } else if (exp.validate()){
+
+                            if (exp.evaluate() == "ERROR"){
+                                entry.setErrorFlag(true);
+                                entry.setErrorMsg("*** ERROR: illegal expression ***\n");
+                            } else {
+                                string temp = baseConverter(10, 16, exp.evaluate(), 4);
+                                stringstream ss(temp);
+                                ss >> std::hex >> locCounter;
+                            }
+
+                    } else if (operand != "*"){
+                            stringstream ss(symTable[operand].getAddress());
+                            ss >> std::hex >> locCounter;
+
                     } else if (symTable.count(operand) == 0 && operand != "*"){
                         entry.setErrorFlag(true);
                         entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
-                    } else {
-                        if (operand != "*") {
-                            stringstream ss(symTable[operand].getAddress());
-                            ss >> std::hex >> locCounter;
-                        }
                     }
+
                 } else if (mnemonic == "EQU"){
+                    Expression exp;
+                    exp.setLocctr(locCounter);
+                    exp.SetSymTable(symTable);
+                    exp.Setexpression(operand);
                     if (label == ""){
                         entry.setErrorFlag(true);
                         entry.setErrorMsg("*** ERROR: missing label field ***\n");
@@ -209,15 +229,34 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
                     else if (operand == ""){
                        entry.setErrorFlag(true);
                        entry.setErrorMsg("*** ERROR: missing operand field ***\n");
+                    } else if (exp.validate()){
+                        symValue newValue;
+                        if (exp.validate()){
+                            if (exp.evaluate() == "ERROR"){
+                                entry.setErrorFlag(true);
+                                entry.setErrorMsg("*** ERROR: illegal expression ***\n");
+                            } else {
+                                string temp = baseConverter(10, 16, exp.evaluate(), 4);
+                                newValue.setAddress(temp);
+                                // relative or absolute
+                                if (exp.getExpressionType() == "relative"){
+                                    newValue.setFlag(0);
+                                } else {
+                                    newValue.setFlag(1);
+                                }
+                                symTable[label] = newValue;
+                            }
+                        } else if (operand == "*"){
+                                newValue.setAddress(incrementLocCounter(locCounter, 0));
+                                symTable[label] = newValue;
+                        } else {
+                                symTable[label] = symTable[operand];
+                        }
                     } else if(symTable.count(operand) == 0 && operand != "*") {
                        entry.setErrorFlag(true);
                        entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
-                    } else {
-                        symValue newValue;
-                        newValue.setAddress(incrementLocCounter(locCounter, 0));
-                        if (operand == "*") symTable[label] = newValue;
-                        else symTable[label] = symTable[operand];
                     }
+
                 }
                 else if (mnemonic == "WORD" || mnemonic == "BYTE" || mnemonic == "RESW" || mnemonic == "RESB"){
                     entry.setOpCode(mnemonic);
@@ -480,4 +519,26 @@ string Pass1Algorithm::incrementLocCounter(int &locCounter, int inc)
 void Pass1Algorithm::padTo(std::string &str, const size_t num, const char paddingChar){
     if(num > str.size())
         str.insert(0, num - str.size(), paddingChar);
+}
+
+string Pass1Algorithm::baseConverter(int base1, int base2, string s1, int len)
+{
+    string s2 = "";
+    int value = 0;
+    for(auto ch:s1)
+    {
+        value = (base1 * value) + (isalpha(ch) ? (ch - 'A' + 10) : (ch - '0'));
+    }
+    while(value)
+    {
+        s2 = static_cast <char> ((value % base2 < 10) ?
+                                 (value % base2 + '0') : (value % base2 - 10 + 'A')) + s2;
+        value/= base2;
+    }
+    int resultSize = s2.length();
+    for(int i = 0; i < len - resultSize; i++)
+    {
+        s2 = "0" + s2;
+    }
+    return s2;
 }

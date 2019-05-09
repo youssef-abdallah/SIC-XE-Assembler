@@ -4,67 +4,74 @@ line no.    Address          Label          Mnemonic          Operands          
 3           0000             FIRST             STL               RETADR            
 4           0003                               LDB               #LENGTH           
 5           0006                               BASE              LENGTH            
-6           0006             CLOOP             +JSUB             RDREC             
-7           000A                               LDA               LENGTH            
-8           000D                               COMP              #0                
-9           0010                               JEQ               ENDFIL            
-10          0013                               +JSUB             WRREC             
-11          0017                               J                 CLOOP             
-12          001A             ENDFIL            LDA               EOF               
-13          001D                               STA               BUFFER            
-14          0020                               LDA               #3                
-15          0023                               STA               LENGTH            
-16          0026                               +JSUB             WRREC             
-17          002A                               J                 @RETADR           
-18          002D             EOF               BYTE              C'EOF'            
-19          0030             RETADR            RESW              1                 
-20          0033             LENGTH            RESW              1                 
-21          0036             BUFFER            RESB              4096              
-22                         .
-23                         .SUBROUTINE TO READ INTO BUFFER
-24          1036             RDREC             CLEAR             X                 
-25          1038                               CLEAR             A                 
-26          103A                               CLEAR             S                 
-27          103C                               +LDT              #4096             
-28          1040             RLOOP             TD                INPUT             
-29          1043                               JEQ               RLOOP             
-30          1046                               TD                INPUT             
-31          1049                               COMPR             A,S               
-32          104B                               JEQ               EXIT              
-33          104E                               STCH              BUFFER,X          
-34          1051                               TIXR              T                 
-35          1053                               JLT               RLOOP             
-36          1056             EXIT              STX               LENGTH            
-37          1059                               RSUB                                
-38          105C             INPUT             BYTE              X'F1'             
-39          105D             WRREC             CLEAR             X                 
-40          105F                               LDT               LENGTH            
-41          1062             WLOOP             TD                OUTPUT            
-42          1065                               JEQ               WLOOP             
-43          1068                               LDCH              BUFFER,X          
-44          106B                               WD                OUTPUT            
-45          106E                               TIXR              T                 
-46          1070                               JLT               WLOOP             
-47          1073                               RSUB                                
-48          1076             OUTPUT            BYTE              X'05'             
-49          1077                               END               FIRST             
+6           0006             L1                WORD              100               
+7           0009             L2                WORD              50                
+8           000C             CLOOP             +JSUB             RDREC             
+9           0010                               LDA               LENGTH            
+10          0013                               COMP              #0                
+11          0016                               JEQ               ENDFIL            
+12          0019                               +JSUB             WRREC             
+13          001D                               J                 CLOOP             
+14          0020                               ORG               L2-L1             
+15          0003             ENDFIL            LDA               EOF               
+16          0006                               STA               BUFFER            
+17          0009                               LDA               #3                
+18          000C                               STA               LENGTH            
+19          000F                               +JSUB             WRREC             
+20          0013                               J                 @RETADR           
+21          0016             EOF               BYTE              C'EOF'            
+22          0019             RETADR            RESW              1                 
+23          001C             LENGTH            RESW              1                 
+24          001F             BUFFER            RESB              4096              
+25                         .
+26                         .SUBROUTINE TO READ INTO BUFFER
+27          101F             RDREC             CLEAR             X                 
+28          1021                               CLEAR             A                 
+29          1023                               CLEAR             S                 
+30          1025                               +LDT              #4096             
+31          1029             RLOOP             TD                INPUT             
+32          102C                               JEQ               RLOOP             
+33          102F                               TD                INPUT             
+34          1032                               COMPR             A,S               
+35          1034                               JEQ               EXIT              
+36          1037                               STCH              BUFFER,X          
+37          103A                               TIXR              T                 
+38          103C                               JLT               RLOOP             
+39          103F             EXIT              STX               LENGTH            
+40          1042                               RSUB                                
+41          1045             INPUT             BYTE              X'F1'             
+42          1046             WRREC             CLEAR             X                 
+43          1048                               LDT               LENGTH            
+44          104B             WLOOP             TD                OUTPUT            
+45          104E                               JEQ               WLOOP             
+46          1051                               LDCH              BUFFER,X          
+47          1054                               WD                OUTPUT            
+48          1057                               TIXR              T                 
+49          1059                               JLT               WLOOP             
+50          105C                               RSUB                                
+51          105F             OUTPUT            BYTE              X'05'             
+52          1060             OP                EQU               L2-L1             
+53          1060                               END               FIRST             
                          *** P A S S   1   E N D E D   S U C C E S S F U L L Y ***
 
            S Y M B O L  T A B L E
           ************************
           NAME               VALUE 
           ************************
-          OUTPUT              1076
-          WLOOP               1062
-          INPUT               105C
+          OP                  0003
+          WLOOP               104B
+          INPUT               1045
+          EXIT                103F
+          WRREC               1046
+          RLOOP               1029
           FIRST               0000
-          CLOOP               0006
-          ENDFIL              001A
-          RDREC               1036
-          EOF                 002D
-          RETADR              0030
-          LENGTH              0033
-          BUFFER              0036
-          WRREC               105D
-          RLOOP               1040
-          EXIT                1056
+          L1                  0006
+          CLOOP               000C
+          OUTPUT              105F
+          L2                  0009
+          BUFFER              001F
+          ENDFIL              0003
+          RDREC               101F
+          EOF                 0016
+          RETADR              0019
+          LENGTH              001C
