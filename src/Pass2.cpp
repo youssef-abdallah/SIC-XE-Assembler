@@ -145,17 +145,36 @@ void Pass2::execute(string fileName)
                 int targetAddress;
                 if (operand[0] == '#' || operand[0] == '@')
                 {
+                    if(!symTable.count((operand.substr(1, operand.size() - 1)))){
+                            instruction.setErrorFlag(true);
+                    instruction.setErrorMsg("***Undefined Operand!***");
+                    }
+                    else{
                     targetAddress = strToInt(baseConverter(16, 10, symTable[operand.substr(1, operand.size() - 1)].getAddress(), 5));
+                    }
                 }
-                else if (operand.substr(operand.length() - 2, 2) == ",X")
+                else if (operand.substr(operand.length() - 2, 1) == ",")
                 {
+                    if(operand.substr(operand.length() - 1, 1) == "X"){
                     targetAddress = strToInt(baseConverter(16, 10, symTable[operand.substr(0, operand.size() - 2)].getAddress(), 5));
+                    }else{
+                        instruction.setErrorFlag(true);
+                        instruction.setErrorMsg("***Undefined Register!***");
+                    }
                 }
                 else
                 {
-                    targetAddress = strToInt(baseConverter(16, 10, symTable[operand].getAddress(), 5));
+                    if(!symTable.count(operand)){
+                        instruction.setErrorFlag(true);
+                        instruction.setErrorMsg("***Undefined Operand!***");
+                    }
+                    else{
+                        targetAddress = strToInt(baseConverter(16, 10, symTable[operand].getAddress(), 5));
+                }}
+                if(instruction.getErrorFlag()){
+                        //do nothing
                 }
-                if (mnemonic[0] == '+')
+                else if (mnemonic[0] == '+')
                 {
                     string flags = "110001";
                     adjustFlags(flags, operand);
@@ -437,8 +456,10 @@ void Pass2::writeListingFile(string fileName){
     file<<s<<endl;
     for(auto it = listingTable.begin(); it != listingTable.end(); it++) {
         ListingEntry entry = *it;
-        if(entry.getAddress()!=""&&!entry.getErrorFlag()){
-            string fl=entry.getFlags().to_string<char,std::string::traits_type,std::string::allocator_type>();;
+        if(entry.getAddress()!=""){
+            s="";
+            if(!entry.getErrorFlag()){
+            string fl=entry.getFlags().to_string<char,std::string::traits_type,std::string::allocator_type>();
             s="n=";
             s+=fl[0];
             s+=" i=";
@@ -451,6 +472,11 @@ void Pass2::writeListingFile(string fileName){
             s+=fl[4];
             s+=" e=";
             s+=fl[5];
+            }
+            if(entry.getErrorFlag()){
+            successfullyAssembled=false;
+            s=entry.getErrorMsg();
+            }
             padTo(s,12+s.length()-entry.getOpCode().length());
             s=entry.getOpCode()+s;
             padTo(s,10+s.length()-entry.getOperand().length());
@@ -461,19 +487,13 @@ void Pass2::writeListingFile(string fileName){
             s=entry.getObjectCode()+s;
             padTo(s,10+s.length()-entry.getAddress().length());
             s=entry.getAddress()+s;
-            //padTo(s,s.length()-3);
-            //s=entry.getLineNumber().to_string()+s;
         file<<s<<endl;
         file<<endl;}
-        if(entry.getErrorFlag()){
-            successfullyAssembled=false;
-            file << spaces<<entry.getErrorMsg()<<endl;
-        }
     }
     if(successfullyAssembled){
-        file << spaces<<"***** S U C C E S S F U L L Y  A S S E M B L E D ****"<<endl;
+        file << spaces<<"***** S U C C E S S F U L L Y  A S S E M B L E D *****"<<endl;
     }else{
-        file << spaces<<"***** U N S U C C E S S F U L L Y  A S S E M B L Y ****"<<endl;
+        file << spaces<<"***** U N S U C C E S S F U L L Y  A S S E M B L Y *****"<<endl;
     }
     file.close();
 }

@@ -14,7 +14,7 @@ line no.    Address          Label          Mnemonic          Operands          
 13          001D                               STA               BUFFER            
 14          0020                               LDA               #3                
 15          0023                               STA               LENGTH            
-16          0026                               +JSUB             WRRECC            
+16          0026                               +JSUB             WRREC             
 17          002A                               J                 @RETADR           
 18          002D             EOF               BYTE              C'EOF'            
 19          0030             RETADR            RESW              1                 
@@ -100,7 +100,7 @@ LC        Code      Label     Opcode    Operand     Flags
 
 0023      0F200D              LENGTH    STA         n=1 i=1 x=0   b=0 p=1 e=0
 
-0026      4B100000            WRRECC    +JSUB       n=1 i=1 x=0   b=0 p=0 e=1
+0026      4B10105D            WRREC     +JSUB       n=1 i=1 x=0   b=0 p=0 e=1
 
 002A      3E2003              @RETADR   J           n=1 i=0 x=0   b=0 p=1 e=0
 
@@ -164,4 +164,4 @@ LC        Code      Label     Opcode    Operand     Flags
 
 1077                          FIRST     END         n=0 i=0 x=0   b=0 p=0 e=0
 
-                         ***** S U C C E S S F U L L Y  A S S E M B L E D ****
+                         ***** S U C C E S S F U L L Y  A S S E M B L E D *****

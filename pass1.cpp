@@ -121,10 +121,12 @@ int main(int argc, char *argv[])
     initializeOpTabAndInstructionFormat();
     Pass1Algorithm pass1;
     string freeFormat(argv[2]);
-    pass1.execute(argv[1], freeFormat == "free");
-    Pass2 pass2;
-    pass2.SetListingTable(pass1.getListingTable());
-    pass2.SetSymTable(pass1.getSymTable());
-    pass2.execute(argv[1]);
+    bool successfullPass1=pass1.execute(argv[1], freeFormat == "free");
+    if(successfullPass1){
+        Pass2 pass2;
+        pass2.SetListingTable(pass1.getListingTable());
+        pass2.SetSymTable(pass1.getSymTable());
+        pass2.execute(argv[1]);
+        }
     return 0;
 }

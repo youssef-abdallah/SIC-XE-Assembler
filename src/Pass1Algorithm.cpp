@@ -11,7 +11,7 @@ Pass1Algorithm::~Pass1Algorithm()
     //dtor
 }
 
-void Pass1Algorithm::execute(string fileName, bool freeFormat) {
+bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
     ifstream file;
     openFile(file, fileName);
     string s, instruction;
@@ -354,7 +354,9 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
         }
     }
     file.close();
-    writeListingFile(fileName);
+    bool successfullPass1=true;
+    successfullPass1=writeListingFile(fileName);
+    return successfullPass1;
 }
 
 void Pass1Algorithm::openFile(ifstream& file, string fileName){
@@ -384,7 +386,7 @@ bool Pass1Algorithm::isHexaString(std::string const& s)
   return std::all_of(s.begin(), s.end(), ::isxdigit);
 }
 
-void Pass1Algorithm::writeListingFile(string fileName){
+bool Pass1Algorithm::writeListingFile(string fileName){
     ofstream file;
     file.open (fileName.substr(0, fileName.length() - 4) + ".asm");
     string commentSpaces = "";
@@ -425,7 +427,6 @@ void Pass1Algorithm::writeListingFile(string fileName){
                 file << entry.getLineNumber() << spaces << s << endl;
             }
         }
-
     }
     if (!endFlag){
         successfulAssembly = false;
@@ -453,6 +454,7 @@ void Pass1Algorithm::writeListingFile(string fileName){
     }
 
     file.close();
+    return successfulAssembly;
 }
 
 string Pass1Algorithm::incrementLocCounter(int &locCounter, int inc)

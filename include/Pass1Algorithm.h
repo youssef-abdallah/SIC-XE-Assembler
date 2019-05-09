@@ -20,8 +20,8 @@ class Pass1Algorithm
     public:
         Pass1Algorithm();
         virtual ~Pass1Algorithm();
-        void execute(string fileName, bool freeFormat);
-        void writeListingFile(string fileName);
+        bool execute(string fileName, bool freeFormat);
+        bool writeListingFile(string fileName);
         unordered_map<string, symValue> getSymTable() { return symTable; }
         vector<ListingEntry> getListingTable() { return listingTable; }
 
