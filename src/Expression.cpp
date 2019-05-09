@@ -1,6 +1,7 @@
 #include "Expression.h"
 #include <iostream>
 #include <regex>
+#include <unordered_map>
 
 Expression::Expression()
 {
@@ -43,10 +44,15 @@ string Expression::evaluate(){
     } else if (isNumeric(operand1Str)){
         operand1Int = strToInt(operand1Str);
     } else {
-        val1 = symTable[operand1Str];
-        operand1Int = strToInt(baseConverter(16, 10, val1.getAddress(), 4));
-        cout << "address in hex: " << val1.getAddress() << "  address in decimal : " << baseConverter(16, 10, val1.getAddress(), 4) << endl;
-        op1 = true;
+        if (symTable.find(operand1Str) == symTable.end()){
+            return "Undefined";
+        } else {
+            val1 = symTable[operand1Str];
+            operand1Int = strToInt(baseConverter(16, 10, val1.getAddress(), 4));
+            cout << "address in hex: " << val1.getAddress() << "  address in decimal : " << baseConverter(16, 10, val1.getAddress(), 4) << endl;
+            op1 = true;
+        }
+
     }
 
     if (operand2Str == "*"){
@@ -54,9 +60,13 @@ string Expression::evaluate(){
     } else if (isNumeric(operand2Str)){
         operand2Int = strToInt(operand2Str);
     } else {
-        val2 = symTable[operand2Str];
-        operand2Int = strToInt(baseConverter(16, 10, val2.getAddress(), 4));
-        op2 = true;
+        if (symTable.find(operand2Str) == symTable.end()){
+            return "Undefined";
+        } else {
+            val2 = symTable[operand2Str];
+            operand2Int = strToInt(baseConverter(16, 10, val2.getAddress(), 4));
+            op2 = true;
+        }
     }
 
 

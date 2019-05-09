@@ -198,10 +198,13 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
                        entry.setErrorFlag(true);
                        entry.setErrorMsg("*** ERROR: missing operand field ***\n");
                     } else if (exp.validate()){
-
-                            if (exp.evaluate() == "ERROR"){
+                            string s = exp.evaluate();
+                            if (s == "ERROR"){
                                 entry.setErrorFlag(true);
                                 entry.setErrorMsg("*** ERROR: illegal expression ***\n");
+                            } else if (s == "Undefined"){
+                                entry.setErrorFlag(true);
+                                entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
                             } else {
                                 string temp = baseConverter(10, 16, exp.evaluate(), 4);
                                 stringstream ss(temp);
@@ -232,9 +235,13 @@ void Pass1Algorithm::execute(string fileName, bool freeFormat) {
                     } else if (exp.validate()){
                         symValue newValue;
                         if (exp.validate()){
-                            if (exp.evaluate() == "ERROR"){
+                            string s = exp.evaluate();
+                            if (s == "ERROR"){
                                 entry.setErrorFlag(true);
                                 entry.setErrorMsg("*** ERROR: illegal expression ***\n");
+                            } else if (s == "Undefined"){
+                                entry.setErrorFlag(true);
+                                entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
                             } else {
                                 string temp = baseConverter(10, 16, exp.evaluate(), 4);
                                 newValue.setAddress(temp);

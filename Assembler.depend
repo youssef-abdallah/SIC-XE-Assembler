@@ -133,7 +133,7 @@
 	<sstream>
 	"globals.h"
 
-1557364027 source:f:\k\faculty\2ndyear\2nd term\systems programming\project\project_repo\sic-xe-assembler\src\pass1algorithm.cpp
+1557442139 source:f:\k\faculty\2ndyear\2nd term\systems programming\project\project_repo\sic-xe-assembler\src\pass1algorithm.cpp
 	"Pass1Algorithm.h"
 	<iostream>
 	"Expression.h"
@@ -180,10 +180,11 @@
 	<globals.h>
 	<regex>
 
-1557362562 source:f:\k\faculty\2ndyear\2nd term\systems programming\project\project_repo\sic-xe-assembler\src\expression.cpp
+1557442371 source:f:\k\faculty\2ndyear\2nd term\systems programming\project\project_repo\sic-xe-assembler\src\expression.cpp
 	"Expression.h"
 	<iostream>
 	<regex>
+	<unordered_map>
 
 1557360306 source:f:\k\faculty\2ndyear\2nd term\systems programming\project\project_repo\sic-xe-assembler\src\symvalue.cpp
 	"symValue.h"
