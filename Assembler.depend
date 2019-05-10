@@ -8,16 +8,15 @@
 	"Pass1Algorithm.h"
 	"symValue.h"
 
-1556911098 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\listingentry.h
+1557498210 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\listingentry.h
 	<string>
-	"globals.h"
 	<bitset>
 
 1556229819 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\listingentry.cpp
 	"ListingEntry.h"
 	<string>
 
-1556210636 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\parser.cpp
+1557500097 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\parser.cpp
 	"Parser.h"
 	<algorithm>
 
@@ -26,10 +25,10 @@
 	<sstream>
 	"globals.h"
 
-1556229876 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\symvalue.cpp
+1557490113 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\symvalue.cpp
 	"symValue.h"
 
-1556222762 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\symvalue.h
+1557490063 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\symvalue.h
 	<string>
 	<globals.h>
 
@@ -38,10 +37,12 @@
 1556211406 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\static.cpp
 	"Static.h"
 
-1556911098 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\globals.h
+1557498660 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\globals.h
 	<unordered_map>
 	<unordered_set>
 	"symValue.h"
+	"Utilities.h"
+	"File.h"
 
 1556214237 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\instructionvalidator.cpp
 	"InstructionValidator.h"
@@ -50,11 +51,11 @@
 	<string>
 	<globals.h>
 
-1557131563 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\pass1algorithm.cpp
+1557500033 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\pass1algorithm.cpp
 	"Pass1Algorithm.h"
 	<iostream>
 
-1556911098 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\pass1algorithm.h
+1557498711 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\pass1algorithm.h
 	"Parser.h"
 	"globals.h"
 	"symValue.h"
@@ -66,6 +67,7 @@
 	<fstream>
 	<algorithm>
 	<unordered_map>
+	"Expression.h"
 
 1556225815 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\main.cpp
 	<iostream>
@@ -76,7 +78,7 @@
 	"Pass1Algorithm.h"
 	"symValue.h"
 
-1556911099 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\pass1.cpp
+1557498730 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\pass1.cpp
 	<iostream>
 	<string>
 	"ListingEntry.h"
@@ -86,11 +88,11 @@
 	"symValue.h"
 	"Pass2.h"
 
-1557319745 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\pass2.cpp
+1557500315 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\pass2.cpp
 	"Pass2.h"
 	<iostream>
 
-1557316539 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\pass2.h
+1557492610 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\pass2.h
 	<unordered_map>
 	<sstream>
 	"symValue.h"
@@ -98,6 +100,8 @@
 	<regex>
 	"ListingEntry.h"
 	"globals.h"
+	"Utilities.h"
+	<fstream>
 
 1557412239 source:e:\handasa\2\systems programming\sic-xe-assembler\pass1.cpp
 	<iostream>
@@ -176,4 +180,31 @@
 1557411732 source:e:\handasa\2\systems programming\sic-xe-assembler\src\pass2.cpp
 	"Pass2.h"
 	<iostream>
+
+1557493547 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\expression.h
+	<string>
+	<globals.h>
+	<regex>
+	<unordered_map>
+	<symValue.h>
+
+1557494032 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\expression.cpp
+	"Expression.h"
+
+1557493383 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\utilities.h
+	<regex>
+	<vector>
+	<string>
+	<sstream>
+
+1557493417 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\utilities.cpp
+	"Utilities.h"
+
+1557498360 e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\include\file.h
+	<fstream>
+	<vector>
+	<ListingEntry.h>
+
+1557497981 source:e:\college\csed\year 2 term 2\systems programming\assemblercpp\assembler\src\file.cpp
+	"File.h"
 

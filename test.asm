@@ -17,151 +17,159 @@ line no.    Address          Label          Mnemonic          Operands          
 16          0026                               +JSUB             WRREC             
 17          002A                               J                 @RETADR           
 18          002D             EOF               BYTE              C'EOF'            
-19          0030             RETADR            RESW              1                 
-20          0033             LENGTH            RESW              1                 
-21          0036             BUFFER            RESB              4096              
-22                         .
-23                         .SUBROUTINE TO READ INTO BUFFER
-24          1036             RDREC             CLEAR             X                 
-25          1038                               CLEAR             A                 
-26          103A                               CLEAR             S                 
-27          103C                               +LDT              #4096             
-28          1040             RLOOP             TD                INPUT             
-29          1043                               JEQ               RLOOP             
-30          1046                               TD                INPUT             
-31          1049                               COMPR             A,S               
-32          104B                               JEQ               EXIT              
-33          104E                               STCH              BUFFER,X          
-34          1051                               TIXR              T                 
-35          1053                               JLT               RLOOP             
-36          1056             EXIT              STX               LENGTH            
-37          1059                               RSUB                                
-38          105C             INPUT             BYTE              X'F1'             
-39          105D             WRREC             CLEAR             X                 
-40          105F                               LDT               LENGTH            
-41          1062             WLOOP             TD                OUTPUT            
-42          1065                               JEQ               WLOOP             
-43          1068                               LDCH              BUFFER,X          
-44          106B                               WD                OUTPUT            
-45          106E                               TIXR              T                 
-46          1070                               JLT               WLOOP             
-47          1073                               RSUB                                
-48          1076             OUTPUT            BYTE              X'05'             
-49          1077                               END               FIRST             
+19          0030             SOSO              EQU               FIRST+5           
+20          0030             STR               BYTE              C'test STRING'    
+21          003B             RETADR            RESW              1                 
+22          003E             LENGTH            RESW              1                 
+23          0041             BUFFER            RESB              4096              
+24                         .
+25                         .SUBROUTINE TO READ INTO BUFFER
+26          1041             RDREC             CLEAR             X                 
+27          1043                               CLEAR             A                 
+28          1045                               CLEAR             S                 
+29          1047                               +LDT              #4096             
+30          104B             RLOOP             TD                INPUT             
+31          104E                               JEQ               RLOOP             
+32          1051                               TD                INPUT             
+33          1054                               COMPR             A,S               
+34          1056                               JEQ               EXIT              
+35          1059                               STCH              BUFFER,X          
+36          105C                               TIXR              T                 
+37          105E                               JLT               RLOOP             
+38          1061             EXIT              STX               LENGTH            
+39          1064                               RSUB                                
+40          1067             INPUT             BYTE              X'F1'             
+41          1068             WRREC             CLEAR             X                 
+42          106A                               LDT               LENGTH            
+43          106D             WLOOP             TD                OUTPUT            
+44          1070                               JEQ               WLOOP             
+45          1073                               LDCH              BUFFER,X          
+46          1076                               WD                OUTPUT            
+47          1079                               TIXR              T                 
+48          107B                               JLT               WLOOP             
+49          107E                               RSUB                                
+50          1081             OUTPUT            BYTE              X'05'             
+51          1082                               END               FIRST             
                          *** P A S S   1   E N D E D   S U C C E S S F U L L Y ***
 
            S Y M B O L  T A B L E
           ************************
           NAME               VALUE 
           ************************
-          OUTPUT              1076
-          WLOOP               1062
-          INPUT               105C
+          OUTPUT              1081
+          INPUT               1067
+          EXIT                1061
+          WRREC               1068
+          RLOOP               104B
           FIRST               0000
           CLOOP               0006
           ENDFIL              001A
-          RDREC               1036
+          RDREC               1041
           EOF                 002D
-          RETADR              0030
-          LENGTH              0033
-          BUFFER              0036
-          WRREC               105D
-          RLOOP               1040
-          EXIT                1056
+          RETADR              003B
+          SOSO                0005
+          WLOOP               106D
+          STR                 0030
+          LENGTH              003E
+          BUFFER              0041
                          **************************************************
                          ********** S t a r t  o f  P a s s  II ***********
 LC        Code      Label     Opcode    Operand     Flags
 
-0000                COPY      0000      START       n=0 i=0 x=0   b=0 p=0 e=0
+0000                COPY      START     0000        n=0 i=0 x=0   b=0 p=0 e=0
 
-0000      17202D    FIRST     RETADR    STL         n=1 i=1 x=0   b=0 p=1 e=0
+0000      172038    FIRST     STL       RETADR      n=1 i=1 x=0   b=0 p=1 e=0
 
-0003      69202D              #LENGTH   LDB         n=0 i=1 x=0   b=0 p=1 e=0
+0003      692038              LDB       #LENGTH     n=0 i=1 x=0   b=0 p=1 e=0
 
-0006                          LENGTH    BASE        n=0 i=0 x=0   b=0 p=0 e=0
+0006                          BASE      LENGTH      n=0 i=0 x=0   b=0 p=0 e=0
 
-0006      4B101036  CLOOP     RDREC     +JSUB       n=1 i=1 x=0   b=0 p=0 e=1
+0006      4B101041  CLOOP     +JSUB     RDREC       n=1 i=1 x=0   b=0 p=0 e=1
 
-000A      032026              LENGTH    LDA         n=1 i=1 x=0   b=0 p=1 e=0
+000A      032031              LDA       LENGTH      n=1 i=1 x=0   b=0 p=1 e=0
 
-000D      290000              #0        COMP        n=0 i=1 x=0   b=0 p=0 e=0
+000D      290000              COMP      #0          n=0 i=1 x=0   b=0 p=0 e=0
 
-0010      332007              ENDFIL    JEQ         n=1 i=1 x=0   b=0 p=1 e=0
+0010      332007              JEQ       ENDFIL      n=1 i=1 x=0   b=0 p=1 e=0
 
-0013      4B10105D            WRREC     +JSUB       n=1 i=1 x=0   b=0 p=0 e=1
+0013      4B101068            +JSUB     WRREC       n=1 i=1 x=0   b=0 p=0 e=1
 
-0017      3F2FEC              CLOOP     J           n=1 i=1 x=0   b=0 p=1 e=0
+0017      3F2FEC              J         CLOOP       n=1 i=1 x=0   b=0 p=1 e=0
 
-001A      032010    ENDFIL    EOF       LDA         n=1 i=1 x=0   b=0 p=1 e=0
+001A      032010    ENDFIL    LDA       EOF         n=1 i=1 x=0   b=0 p=1 e=0
 
-001D      0F2016              BUFFER    STA         n=1 i=1 x=0   b=0 p=1 e=0
+001D      0F2021              STA       BUFFER      n=1 i=1 x=0   b=0 p=1 e=0
 
-0020      010003              #3        LDA         n=0 i=1 x=0   b=0 p=0 e=0
+0020      010003              LDA       #3          n=0 i=1 x=0   b=0 p=0 e=0
 
-0023      0F200D              LENGTH    STA         n=1 i=1 x=0   b=0 p=1 e=0
+0023      0F2018              STA       LENGTH      n=1 i=1 x=0   b=0 p=1 e=0
 
-0026      4B10105D            WRREC     +JSUB       n=1 i=1 x=0   b=0 p=0 e=1
+0026      4B101068            +JSUB     WRREC       n=1 i=1 x=0   b=0 p=0 e=1
 
-002A      3E2003              @RETADR   J           n=1 i=0 x=0   b=0 p=1 e=0
+002A      3E200E              J         @RETADR     n=1 i=0 x=0   b=0 p=1 e=0
 
-002D      454F46    EOF       C'EOF'    BYTE        n=0 i=0 x=0   b=0 p=0 e=0
+002D      454F46    EOF       BYTE      C'EOF'      n=0 i=0 x=0   b=0 p=0 e=0
 
-0030                RETADR    1         RESW        n=0 i=0 x=0   b=0 p=0 e=0
+0030                SOSO      EQU       FIRST+5     n=0 i=0 x=0   b=0 p=0 e=0
 
-0033                LENGTH    1         RESW        n=0 i=0 x=0   b=0 p=0 e=0
+0030      7465737420535452494E47STR       BYTE      C'test STRING'n=0 i=0 x=0   b=0 p=0 e=0
 
-0036                BUFFER    4096      RESB        n=0 i=0 x=0   b=0 p=0 e=0
+003B                RETADR    RESW      1           n=0 i=0 x=0   b=0 p=0 e=0
 
-1036      B410      RDREC     X         CLEAR       n=0 i=0 x=0   b=0 p=0 e=0
+003E                LENGTH    RESW      1           n=0 i=0 x=0   b=0 p=0 e=0
 
-1038      B400                A         CLEAR       n=0 i=0 x=0   b=0 p=0 e=0
+0041                BUFFER    RESB      4096        n=0 i=0 x=0   b=0 p=0 e=0
 
-103A      B440                S         CLEAR       n=0 i=0 x=0   b=0 p=0 e=0
+1041      B410      RDREC     CLEAR     X           n=0 i=0 x=0   b=0 p=0 e=0
 
-103C      75101000            #4096     +LDT        n=0 i=1 x=0   b=0 p=0 e=1
+1043      B400                CLEAR     A           n=0 i=0 x=0   b=0 p=0 e=0
 
-1040      E32019    RLOOP     INPUT     TD          n=1 i=1 x=0   b=0 p=1 e=0
+1045      B440                CLEAR     S           n=0 i=0 x=0   b=0 p=0 e=0
 
-1043      332FFA              RLOOP     JEQ         n=1 i=1 x=0   b=0 p=1 e=0
+1047      75101000            +LDT      #4096       n=0 i=1 x=0   b=0 p=0 e=1
 
-1046      E32013              INPUT     TD          n=1 i=1 x=0   b=0 p=1 e=0
+104B      E32019    RLOOP     TD        INPUT       n=1 i=1 x=0   b=0 p=1 e=0
 
-1049      A004                A,S       COMPR       n=0 i=0 x=0   b=0 p=0 e=0
+104E      332FFA              JEQ       RLOOP       n=1 i=1 x=0   b=0 p=1 e=0
 
-104B      332008              EXIT      JEQ         n=1 i=1 x=0   b=0 p=1 e=0
+1051      E32013              TD        INPUT       n=1 i=1 x=0   b=0 p=1 e=0
 
-104E      57C003              BUFFER,X  STCH        n=1 i=1 x=1   b=1 p=0 e=0
+1054      A004                COMPR     A,S         n=0 i=0 x=0   b=0 p=0 e=0
 
-1051      B850                T         TIXR        n=0 i=0 x=0   b=0 p=0 e=0
+1056      332008              JEQ       EXIT        n=1 i=1 x=0   b=0 p=1 e=0
 
-1053      3B2FEA              RLOOP     JLT         n=1 i=1 x=0   b=0 p=1 e=0
+1059      57C003              STCH      BUFFER,X    n=1 i=1 x=1   b=1 p=0 e=0
 
-1056      134000    EXIT      LENGTH    STX         n=1 i=1 x=0   b=1 p=0 e=0
+105C      B850                TIXR      T           n=0 i=0 x=0   b=0 p=0 e=0
 
-1059      4F0000                        RSUB        n=1 i=1 x=0   b=0 p=0 e=0
+105E      3B2FEA              JLT       RLOOP       n=1 i=1 x=0   b=0 p=1 e=0
 
-105C      F1        INPUT     X'F1'     BYTE        n=0 i=0 x=0   b=0 p=0 e=0
+1061      134000    EXIT      STX       LENGTH      n=1 i=1 x=0   b=1 p=0 e=0
 
-105D      B410      WRREC     X         CLEAR       n=0 i=0 x=0   b=0 p=0 e=0
+1064      4F0000              RSUB                  n=1 i=1 x=0   b=0 p=0 e=0
 
-105F      774000              LENGTH    LDT         n=1 i=1 x=0   b=1 p=0 e=0
+1067      F1        INPUT     BYTE      X'F1'       n=0 i=0 x=0   b=0 p=0 e=0
 
-1062      E32011    WLOOP     OUTPUT    TD          n=1 i=1 x=0   b=0 p=1 e=0
+1068      B410      WRREC     CLEAR     X           n=0 i=0 x=0   b=0 p=0 e=0
 
-1065      332FFA              WLOOP     JEQ         n=1 i=1 x=0   b=0 p=1 e=0
+106A      774000              LDT       LENGTH      n=1 i=1 x=0   b=1 p=0 e=0
 
-1068      53C003              BUFFER,X  LDCH        n=1 i=1 x=1   b=1 p=0 e=0
+106D      E32011    WLOOP     TD        OUTPUT      n=1 i=1 x=0   b=0 p=1 e=0
 
-106B      DF2008              OUTPUT    WD          n=1 i=1 x=0   b=0 p=1 e=0
+1070      332FFA              JEQ       WLOOP       n=1 i=1 x=0   b=0 p=1 e=0
 
-106E      B850                T         TIXR        n=0 i=0 x=0   b=0 p=0 e=0
+1073      53C003              LDCH      BUFFER,X    n=1 i=1 x=1   b=1 p=0 e=0
 
-1070      3B2FEF              WLOOP     JLT         n=1 i=1 x=0   b=0 p=1 e=0
+1076      DF2008              WD        OUTPUT      n=1 i=1 x=0   b=0 p=1 e=0
 
-1073      4F0000                        RSUB        n=1 i=1 x=0   b=0 p=0 e=0
+1079      B850                TIXR      T           n=0 i=0 x=0   b=0 p=0 e=0
 
-1076      05        OUTPUT    X'05'     BYTE        n=0 i=0 x=0   b=0 p=0 e=0
+107B      3B2FEF              JLT       WLOOP       n=1 i=1 x=0   b=0 p=1 e=0
 
-1077                          FIRST     END         n=0 i=0 x=0   b=0 p=0 e=0
+107E      4F0000              RSUB                  n=1 i=1 x=0   b=0 p=0 e=0
+
+1081      05        OUTPUT    BYTE      X'05'       n=0 i=0 x=0   b=0 p=0 e=0
+
+1082                          END       FIRST       n=0 i=0 x=0   b=0 p=0 e=0
 
                          ***** S U C C E S S F U L L Y  A S S E M B L E D *****

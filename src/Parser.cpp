@@ -12,7 +12,6 @@ Parser::~Parser()
 }
 
 void Parser::parse(string s){
-    std::transform(s.begin(), s.end(), s.begin(), ::toupper);
     vector<string> instructions;
     bool commentFlag = false;
     std::istringstream iss(s);
@@ -20,13 +19,31 @@ void Parser::parse(string s){
     commentFlag = false;
     while(iss >> instruction)
     {
+        int quotesCount = 0;
+        for(int i = 0; i < (int) instruction.length(); i++){
+            if (instruction[i] == '\''){
+                quotesCount++;
+            }
+        }
         if (commentFlag || instruction[0] == '.')
         {
             commentFlag = 1;
             comment += instruction + " ";
+        } else if (quotesCount == 1){
+            string restOfInstruction;
+            while(iss >> restOfInstruction){
+                instruction += " " + restOfInstruction;
+                if (restOfInstruction.back() == '\''){
+                    break;
+                }
+            }
+            instructions.push_back(instruction);
+        } else if (quotesCount == 2){
+            instructions.push_back(instruction);
         }
         else
         {
+            std::transform(instruction.begin(), instruction.end(), instruction.begin(), ::toupper);
             instructions.push_back(instruction);
         }
     }

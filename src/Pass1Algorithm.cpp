@@ -19,7 +19,6 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
     bool firstLine = true;
     while(getline(file, s))
     {
-        std::transform(s.begin(), s.end(), s.begin(), ::toupper);
         lineNumber++;
         std::istringstream iss(s);
         string firstWord;
@@ -103,7 +102,7 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
             else
             {
                 entry.setErrorFlag(true);
-                entry.setErrorMsg("*** ERROR: this statement can't have a label ***\n");
+                entry.setErrorMsg("*** ERROR: this statement has extra fields ***\n");
             }
             if (mnemonic == "END")
             {
@@ -185,7 +184,11 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
                         entry.setErrorMsg("*** ERROR: this statement can't have an operand ***\n");
                     }
                 } else if (mnemonic == "ORG"){
-                   if (label != ""){
+                    Expression exp;
+                    exp.setLocctr(locCounter);
+                    exp.SetSymTable(symTable);
+                    exp.Setexpression(operand);
+                    if (label != ""){
                         entry.setErrorFlag(true);
                         entry.setErrorMsg("*** ERROR: this statement can't have a label ***\n");
                     }
@@ -195,13 +198,34 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
                     } else if (symTable.count(operand) == 0 && operand != "*"){
                         entry.setErrorFlag(true);
                         entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
-                    } else {
-                        if (operand != "*") {
-                            stringstream ss(symTable[operand].getAddress());
+                    } else if (exp.validate()){
+                        string s = exp.evaluate();
+                        if (s == "ERROR"){
+                            entry.setErrorFlag(true);
+                            entry.setErrorMsg("*** ERROR: illegal expression ***\n");
+                        } else if (s == "Undefined"){
+                            entry.setErrorFlag(true);
+                            entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
+                        } else {
+                            string temp = util.baseConverter(10, 16, exp.evaluate(), 4);
+                            stringstream ss(temp);
                             ss >> std::hex >> locCounter;
                         }
                     }
-                } else if (mnemonic == "EQU"){
+                        else if (operand != "*") {
+                            stringstream ss(symTable[operand].getAddress());
+                            ss >> std::hex >> locCounter;
+                        }
+                        else if (symTable.count(operand) == 0 && operand != "*"){
+                            entry.setErrorFlag(true);
+                            entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
+                        }
+                    }
+                    else if (mnemonic == "EQU"){
+                    Expression exp;
+                    exp.setLocctr(locCounter);
+                    exp.SetSymTable(symTable);
+                    exp.Setexpression(operand);
                     if (label == ""){
                         entry.setErrorFlag(true);
                         entry.setErrorMsg("*** ERROR: missing label field ***\n");
@@ -209,14 +233,36 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
                     else if (operand == ""){
                        entry.setErrorFlag(true);
                        entry.setErrorMsg("*** ERROR: missing operand field ***\n");
+                    } else if (exp.validate()){
+                        symValue newValue;
+                        if (exp.validate()){
+                            string s = exp.evaluate();
+                            if (s == "ERROR"){
+                                entry.setErrorFlag(true);
+                                entry.setErrorMsg("*** ERROR: illegal expression ***\n");
+                            } else if (s == "Undefined"){
+                                entry.setErrorFlag(true);
+                                entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
+                            } else {
+                                string temp = util.baseConverter(10, 16, exp.evaluate(), 4);
+                                newValue.setAddress(temp);
+                                // relative or absolute
+                                if (exp.getExpressionType() == "relative"){
+                                    newValue.setFlag(0);
+                                } else {
+                                    newValue.setFlag(1);
+                                }
+                                symTable[label] = newValue;
+                            }
+                        }  else if (operand == "*"){
+                                newValue.setAddress(incrementLocCounter(locCounter, 0));
+                                symTable[label] = newValue;
+                        } else {
+                                symTable[label] = symTable[operand];
+                        }
                     } else if(symTable.count(operand) == 0 && operand != "*") {
                        entry.setErrorFlag(true);
                        entry.setErrorMsg("*** ERROR: undefined symbol in operand ***\n");
-                    } else {
-                        symValue newValue;
-                        newValue.setAddress(incrementLocCounter(locCounter, 0));
-                        if (operand == "*") symTable[label] = newValue;
-                        else symTable[label] = symTable[operand];
                     }
                 }
                 else if (mnemonic == "WORD" || mnemonic == "BYTE" || mnemonic == "RESW" || mnemonic == "RESB"){
@@ -252,7 +298,7 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
                                 // checking for odd length
                                 entry.setErrorFlag(true);
                                 entry.setErrorMsg("*** ERROR: illegal operand ***\n");
-                            } else if (!isHexaString(operand.substr(2, len - 3))){
+                            } else if (!util.isHexaString(operand.substr(2, len - 3))){
                                 entry.setErrorFlag(true);
                                 entry.setErrorMsg("*** ERROR: not a hexadecimal string ***\n");
                             }
@@ -318,7 +364,7 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
                             }
                         }
                         else {
-                            vector<string> tokens = tokenize(operand, ',');
+                            vector<string> tokens = util.tokenize(operand, ',');
                             if (tokens.size() < 2){
                                 entry.setErrorFlag(true);
                                 entry.setErrorMsg("*** ERROR: missing comma in operand field ***\n");
@@ -354,8 +400,8 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
         }
     }
     file.close();
-    bool successfullPass1=true;
-    successfullPass1=writeListingFile(fileName);
+    bool successfullPass1 = true;
+    successfullPass1 = writeListingFile(fileName);
     return successfullPass1;
 }
 
@@ -365,46 +411,29 @@ void Pass1Algorithm::openFile(ifstream& file, string fileName){
 }
 void Pass1Algorithm::addComment(string &s, string comment){
     if (comment != ""){
-        padTo(comment,35 + comment.size() - s.size());
+        util.padTo(comment,35 + comment.size() - s.size());
         s += comment;
     }
 }
-
-vector<string> Pass1Algorithm::tokenize(string s, char delimiter){
-    vector<string> tokens;
-    stringstream check1(s);
-    string intermediate;
-    while(getline(check1, intermediate, ','))
-    {
-        tokens.push_back(intermediate);
-    }
-    return tokens;
-}
-
-bool Pass1Algorithm::isHexaString(std::string const& s)
-{
-  return std::all_of(s.begin(), s.end(), ::isxdigit);
-}
-
 bool Pass1Algorithm::writeListingFile(string fileName){
     ofstream file;
     file.open (fileName.substr(0, fileName.length() - 4) + ".asm");
     string commentSpaces = "";
-    padTo(commentSpaces, 25);
+    util.padTo(commentSpaces, 25);
     string spaces = "";
-    padTo(spaces, 10);
+    util.padTo(spaces, 10);
     bool successfulAssembly = true;
     file << "line no.    Address          Label          Mnemonic          Operands          Comment\n"; //35
     for(auto it = listingTable.begin(); it != listingTable.end(); it++) {
         ListingEntry entry = *it;
         string s = entry.getComment();
-        padTo(s, 18 + s.length() - entry.getOperand().length());
+        util.padTo(s, 18 + s.length() - entry.getOperand().length());
         s = entry.getOperand() + s;
-        padTo(s, 18 + s.length() - entry.getOpCode().length());
+        util.padTo(s, 18 + s.length() - entry.getOpCode().length());
         s = entry.getOpCode() + s;
-        padTo(s, 18 + s.length() - entry.getLabel().length());
+        util.padTo(s, 18 + s.length() - entry.getLabel().length());
         s = entry.getLabel() + s;
-        padTo(s, 17 + s.length() - entry.getAddress().length());
+        util.padTo(s, 17 + s.length() - entry.getAddress().length());
         s = entry.getAddress() + s;
 
         if (entry.getErrorFlag() == false && entry.getAddress() == ""){
@@ -448,7 +477,7 @@ bool Pass1Algorithm::writeListingFile(string fileName){
             string first = (it->first);
             string second = (it->second).getAddress();
             string s = second;
-            padTo(s, spaces.length() + spaces.length()  - first.length() + second.length());
+            util.padTo(s, spaces.length() + spaces.length()  - first.length() + second.length());
             s = (first) + s;
         file << spaces << s << endl;
     }
@@ -479,7 +508,4 @@ string Pass1Algorithm::incrementLocCounter(int &locCounter, int inc)
     return result;
 }
 
-void Pass1Algorithm::padTo(std::string &str, const size_t num, const char paddingChar){
-    if(num > str.size())
-        str.insert(0, num - str.size(), paddingChar);
-}
+

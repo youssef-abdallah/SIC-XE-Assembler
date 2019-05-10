@@ -11,6 +11,7 @@
 #include <fstream>
 #include <algorithm>
 #include <unordered_map>
+#include "Expression.h"
 
 using namespace std;
 
@@ -32,11 +33,8 @@ class Pass1Algorithm
         void openFile(ifstream& file, string fileName);
         void addComment(string &s, string comment);
         vector<ListingEntry> listingTable;
-        vector<string> tokenize(string s, char delimiter);
-        bool isHexaString(std::string const& s);
         void writeSymTable();
         string incrementLocCounter(int &locCounter, int inc);
-        void padTo(std::string &str, const size_t num, const char paddingChar = ' ');
         unordered_map<string, symValue> symTable;
 };
 

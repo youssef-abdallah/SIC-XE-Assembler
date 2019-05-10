@@ -16,6 +16,8 @@ ENDFIL   LDA     EOF
          +JSUB   WRREC
          J       @RETADR
 EOF      BYTE    C'EOF'
+SOSO     EQU     FIRST+5
+STR      BYTE    C'test STRING'
 RETADR   RESW    1
 LENGTH   RESW    1
 BUFFER   RESB    4096

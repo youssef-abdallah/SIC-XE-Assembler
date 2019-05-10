@@ -1,7 +1,6 @@
 #include <string>
 #ifndef LISTINGENTRY_H
 #define LISTINGENTRY_H
-#include "globals.h"
 #include <bitset>
 
 using namespace std;
