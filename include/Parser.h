@@ -3,6 +3,9 @@
 #include <string>
 #include <sstream>
 #include "globals.h"
+#include <algorithm>
+#include <regex>
+#include "globals.h"
 
 using namespace std;
 
@@ -19,6 +22,9 @@ class Parser
         string getComment() { return comment; }
         void parse(string);
         int getLineSize() { return lineSize; };
+        bool validateLiteral(string s);
+        string evaluateLiteral(string s);
+        int getLiteralLength(string s);
 
     protected:
 

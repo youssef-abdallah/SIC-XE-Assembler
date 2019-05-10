@@ -104,6 +104,7 @@ void initializeOpTabAndInstructionFormat()
     directives.insert("RESB");
     directives.insert("ORG");
     directives.insert("EQU");
+    directives.insert("LTORG");
     registerSet["A"] = 0;
     registerSet["X"] = 1;
     registerSet["L"] = 2;
@@ -127,6 +128,7 @@ int main(int argc, char *argv[])
         Pass2 pass2;
         pass2.SetListingTable(pass1.getListingTable());
         pass2.SetSymTable(pass1.getSymTable());
+        pass2.SetLiteralTable(pass1.getLiteralTable());
         pass2.execute(argv[1]);
     }
     return 0;

@@ -32,6 +32,17 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
             string label = parser.getLabel();
             string operand = parser.getOperand();
             int lineSize = parser.getLineSize();
+            if (parser.validateLiteral(operand)){
+                string literalValue = parser.evaluateLiteral(operand);
+                if (!literalTable.count(literalValue)){
+                    LiteralEntry literalEntry;
+                    literalEntry.Setlength(parser.getLiteralLength(operand));
+                    literalEntry.Setvalue(literalValue);
+                    literalEntry.Setname(operand);
+                    literals.push_back(operand);
+                    literalTable[literalValue] = literalEntry;
+                }
+            }
             string checker;
             InstructionValidator validator;
             ListingEntry entry;
@@ -118,6 +129,24 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
                     entry.setErrorMsg("*** ERROR: this statement can't have a label ***\n");
                 }
                 listingTable.push_back(entry);
+                for(auto &elem : literals){
+                    if (elem[1] == 'X' || elem[1] == 'C' || elem[1] == 'x' || elem[1] == 'c'){
+                        entry.setOpCode("BYTE");
+                    } else {
+                        entry.setOpCode("WORD");
+                    }
+                    entry.setOperand(elem.substr(1));
+                    entry.setLineNumber(++lineNumber);
+                    entry.setIsLiteral(true);
+                    entry.setLabel("");
+                    LiteralEntry literalEntry = literalTable[parser.evaluateLiteral(elem)];
+                    literalEntry.Setaddress(incrementLocCounter(locCounter, 0));
+                    entry.setAddress(literalEntry.Getaddress());
+                    literalTable[parser.evaluateLiteral(elem)] = literalEntry;
+                    incrementLocCounter(locCounter, literalEntry.Getlength());
+                    literals.pop_back();
+                    listingTable.push_back(entry);
+                }
                 break;
             }
             else if (directives.count(mnemonic))
@@ -314,6 +343,28 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
                             entry.setErrorFlag(true);
                         }
                     }
+                } else if (mnemonic == "LTORG"){
+                    listingTable.push_back(entry);
+                    for(auto &elem : literals){
+                        if (elem[1] == 'X' || elem[1] == 'C' || elem[1] == 'x' || elem[1] == 'c'){
+                            entry.setOpCode("BYTE");
+                            entry.setOperand(elem.substr(1));
+                        } else {
+                            entry.setOpCode("WORD");
+                            entry.setOperand(elem.substr(3, elem.length() - 4));
+                        }
+                        entry.setLineNumber(++lineNumber);
+                        entry.setIsLiteral(true);
+                        entry.setLabel("");
+                        LiteralEntry literalEntry = literalTable[parser.evaluateLiteral(elem)];
+                        literalEntry.Setaddress(incrementLocCounter(locCounter, 0));
+                        entry.setAddress(literalEntry.Getaddress());
+                        literalTable[parser.evaluateLiteral(elem)] = literalEntry;
+                        incrementLocCounter(locCounter, literalEntry.Getlength());
+                        literals.pop_back();
+                        listingTable.push_back(entry);
+                    }
+                    continue;
                 }
             }
 
@@ -506,6 +557,11 @@ string Pass1Algorithm::incrementLocCounter(int &locCounter, int inc)
     }
     std::transform(result.begin(), result.end(), result.begin(), ::toupper);
     return result;
+}
+
+void Pass1Algorithm::updateLiteralAddress()
+{
+
 }
 
 

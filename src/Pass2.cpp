@@ -142,7 +142,11 @@ void Pass2::execute(string fileName)
             }
             else if (operand != "")
             {
-                int targetAddress;
+                int targetAddress = -1;
+                Parser parser;
+                if (parser.validateLiteral(operand)){
+                    targetAddress = util.strToInt(util.baseConverter(16, 10, literalTable[parser.evaluateLiteral(operand)].Getaddress(), 5));
+                }
                 if (operand[0] == '#' || operand[0] == '@')
                 {
                     if(!symTable.count((operand.substr(1, operand.size() - 1)))){
@@ -162,19 +166,17 @@ void Pass2::execute(string fileName)
                         instruction.setErrorMsg("***Undefined Register!***");
                     }
                 }
-                else
+                else if (targetAddress == -1)
                 {
                     if(!symTable.count(operand)){
                         instruction.setErrorFlag(true);
                         instruction.setErrorMsg("***Undefined Operand!***");
                     }
-                    else{
+                    else {
                         targetAddress = util.strToInt(util.baseConverter(16, 10, symTable[operand].getAddress(), 5));
-                }}
-                if(instruction.getErrorFlag()){
-                        //do nothing
+                    }
                 }
-                else if (mnemonic[0] == '+')
+                if (mnemonic[0] == '+')
                 {
                     string flags = "110001";
                     adjustFlags(flags, operand);

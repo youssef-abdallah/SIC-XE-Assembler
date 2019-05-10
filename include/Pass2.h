@@ -9,6 +9,8 @@
 #include "globals.h"
 #include "Utilities.h"
 #include <fstream>
+#include "LiteralEntry.h"
+#include "Parser.h"
 
 class Pass2
 {
@@ -17,6 +19,7 @@ class Pass2
         Pass2(unordered_map<string, symValue> symTable);
         virtual ~Pass2();
         void SetSymTable(unordered_map<string, symValue> val) { symTable = val; }
+        void SetLiteralTable(unordered_map<string, LiteralEntry> val) { literalTable = val; }
         void SetListingTable(vector<ListingEntry> val) { listingTable = val; }
         void execute(string);
 
@@ -24,6 +27,7 @@ class Pass2
 
     private:
         unordered_map<string, symValue> symTable;
+        unordered_map<string, LiteralEntry> literalTable;
         vector<ListingEntry> listingTable;
         int programCounter, baseRegister;
         bool baseDirective;

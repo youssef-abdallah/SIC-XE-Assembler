@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include "Expression.h"
+#include "LiteralEntry.h"
 
 using namespace std;
 
@@ -24,6 +25,7 @@ class Pass1Algorithm
         bool execute(string fileName, bool freeFormat);
         bool writeListingFile(string fileName);
         unordered_map<string, symValue> getSymTable() { return symTable; }
+        unordered_map<string, LiteralEntry> getLiteralTable() { return literalTable; }
         vector<ListingEntry> getListingTable() { return listingTable; }
 
     protected:
@@ -36,6 +38,9 @@ class Pass1Algorithm
         void writeSymTable();
         string incrementLocCounter(int &locCounter, int inc);
         unordered_map<string, symValue> symTable;
+        unordered_map<string, LiteralEntry> literalTable;
+        vector<string> literals;
+        void updateLiteralAddress();
 };
 
 #endif // PASS1ALGORITHM_H
