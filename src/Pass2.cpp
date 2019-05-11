@@ -403,7 +403,7 @@ void Pass2::writeListingFile(string fileName){
     file.close();
     if(successfullyAssembled){
         ofstream objFile;
-        objFile.open (fileName.substr(0, fileName.length() - 4) + ".OBJ");
+        objFile.open (fileName.substr(0, fileName.length() - 4) + ".obj");
         s=makeObjectProgram();
         objFile<<s<<endl;
         objFile.close();
