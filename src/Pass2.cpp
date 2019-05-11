@@ -400,11 +400,15 @@ void Pass2::writeListingFile(string fileName){
     }else{
         file << spaces << "***** U N S U C C E S S F U L L   A S S E M B L Y *****" << endl;
     }
-    if(successfullyAssembled){
-        s=makeObjectProgram();
-        file<<s<<endl;
-    }
     file.close();
+    if(successfullyAssembled){
+        ofstream objFile;
+        objFile.open (fileName.substr(0, fileName.length() - 4) + ".OBJ");
+        s=makeObjectProgram();
+        objFile<<s<<endl;
+        objFile.close();
+    }
+
 }
 
 void Pass2::padTo(std::string &str, const size_t num, const char paddingChar){
