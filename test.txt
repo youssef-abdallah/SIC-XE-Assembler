@@ -1,8 +1,15 @@
 .2345678901234567890
 COPY     START   0000
+L1       WORD    100
+l2       WORD    200
+DIFF     EQU     L2-L1
 FIRST    STL     RETADR
-         LDB     #LENGTH
-	 BASE    LENGTH
+         LDA     LENGTH
+         LDA     #LENGTH
+         LDA     @LENGTH
+         LDA     DIFF
+         LDA     #DIFF
+         LDA     @DIFF
 CLOOP    +JSUB   RDREC
     	 LDA     LENGTH
          COMP    #0

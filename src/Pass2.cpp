@@ -142,6 +142,7 @@ void Pass2::execute(string fileName)
             }
             else if (operand != "")
             {
+                symValue val;
                 int targetAddress = -1;
                 Parser parser;
                 if (parser.validateLiteral(operand)){
@@ -154,6 +155,7 @@ void Pass2::execute(string fileName)
                         instruction.setErrorMsg("***Undefined Operand!***");
                     }
                     else{
+                        val = symTable[operand.substr(1, operand.size() - 1)];
                         targetAddress = util.strToInt(util.baseConverter(16, 10, symTable[operand.substr(1, operand.size() - 1)].getAddress(), 5));
                     }
                 }
@@ -173,6 +175,7 @@ void Pass2::execute(string fileName)
                         instruction.setErrorMsg("***Undefined Operand!***");
                     }
                     else {
+                        val = symTable[operand];
                         targetAddress = util.strToInt(util.baseConverter(16, 10, symTable[operand].getAddress(), 5));
                     }
                 }
@@ -187,6 +190,17 @@ void Pass2::execute(string fileName)
                     objectCode += flags;
                     objectCode += util.baseConverter(10, 2, util.intToStr(targetAddress), 20);
                     objectCode = util.baseConverter(2, 16, objectCode, 8);
+                }
+                else if (val.flag == val.Absolute){
+                    string flags = "110000";
+                    adjustFlags(flags, operand);
+                    bitset<6> bs(flags);
+                    instruction.setFlags(bs);
+                    objectCode += util.hexDigitToBits(opTab[mnemonic][0], 4);
+                    objectCode += util.hexDigitToBits(opTab[mnemonic][1], 2);
+                    objectCode += flags;
+                    objectCode += util.baseConverter(10, 2, util.intToStr(targetAddress), 12);
+                    objectCode = util.baseConverter(2, 16, objectCode, 6);
                 }
                 else if (targetAddress - programCounter >= -2048
                          && targetAddress - programCounter <= 2047)
