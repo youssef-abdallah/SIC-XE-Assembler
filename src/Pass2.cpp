@@ -163,6 +163,8 @@ void Pass2::execute(string fileName)
                 {
                     if(operand.substr(operand.length() - 1, 1) == "X"){
                     targetAddress = util.strToInt(util.baseConverter(16, 10, symTable[operand.substr(0, operand.size() - 2)].getAddress(), 5));
+                    cout<<targetAddress<<endl;
+                    cout<<programCounter<<endl;
                     }else{
                         instruction.setErrorFlag(true);
                         instruction.setErrorMsg("***Undefined Register!***");
@@ -251,7 +253,7 @@ void Pass2::execute(string fileName)
 
         }
     }
-    makeObjectProgram();
+    //makeObjectProgram();
     writeListingFile(fileName);
 }
 
@@ -273,7 +275,7 @@ void Pass2::adjustFlags(string &flags, string operand)
     return;
 }
 
-void Pass2::makeObjectProgram(){
+string Pass2::makeObjectProgram(){
     string H = "H^";
     string T = "";
     string E = "E^";
@@ -326,6 +328,11 @@ void Pass2::makeObjectProgram(){
     temp = util.baseConverter(10, 16, temp, 6);
     H += temp;
     cout << H  << "\n" << T << E << endl;
+    string s=H;
+    s=s+"\n";
+    s=s+T;
+    s=s+E;
+    return s;
 }
 
 
@@ -383,12 +390,19 @@ void Pass2::writeListingFile(string fileName){
             s = entry.getAddress() + s;
             file << s << endl;
             file << endl;
+            if(entry.getErrorFlag()){
+                break;
+            }
         }
     }
     if(successfullyAssembled){
         file << spaces << "***** S U C C E S S F U L L Y  A S S E M B L E D *****" << endl;
     }else{
         file << spaces << "***** U N S U C C E S S F U L L   A S S E M B L Y *****" << endl;
+    }
+    if(successfullyAssembled){
+        s=makeObjectProgram();
+        file<<s<<endl;
     }
     file.close();
 }

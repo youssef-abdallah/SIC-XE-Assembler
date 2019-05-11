@@ -32,7 +32,7 @@ class Pass2
         int programCounter, baseRegister;
         bool baseDirective;
         void adjustFlags(string &flags, string operand);
-        void makeObjectProgram();
+        string makeObjectProgram();
         string addSpaces(string, int);
         void writeListingFile(string);
         void padTo(std::string &str, const size_t num, const char paddingChar = ' ');

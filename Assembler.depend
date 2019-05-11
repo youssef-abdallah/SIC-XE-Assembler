@@ -118,21 +118,22 @@
 	"symValue.h"
 	"Pass2.h"
 
-1557176802 e:\handasa\2\systems programming\sic-xe-assembler\include\listingentry.h
+1557570259 e:\handasa\2\systems programming\sic-xe-assembler\include\listingentry.h
 	<string>
-	"globals.h"
 	<bitset>
 
-1557176802 e:\handasa\2\systems programming\sic-xe-assembler\include\globals.h
+1557511974 e:\handasa\2\systems programming\sic-xe-assembler\include\globals.h
 	<unordered_map>
 	<unordered_set>
 	"symValue.h"
+	"Utilities.h"
+	"File.h"
 
-1557176802 e:\handasa\2\systems programming\sic-xe-assembler\include\symvalue.h
+1557511974 e:\handasa\2\systems programming\sic-xe-assembler\include\symvalue.h
 	<string>
 	<globals.h>
 
-1557412286 e:\handasa\2\systems programming\sic-xe-assembler\include\pass1algorithm.h
+1557570259 e:\handasa\2\systems programming\sic-xe-assembler\include\pass1algorithm.h
 	"Parser.h"
 	"globals.h"
 	"symValue.h"
@@ -144,17 +145,22 @@
 	<fstream>
 	<algorithm>
 	<unordered_map>
+	"Expression.h"
+	"LiteralEntry.h"
 
-1557176802 e:\handasa\2\systems programming\sic-xe-assembler\include\parser.h
+1557570259 e:\handasa\2\systems programming\sic-xe-assembler\include\parser.h
 	<string>
 	<sstream>
+	"globals.h"
+	<algorithm>
+	<regex>
 	"globals.h"
 
 1557176802 e:\handasa\2\systems programming\sic-xe-assembler\include\instructionvalidator.h
 	<string>
 	<globals.h>
 
-1557329102 e:\handasa\2\systems programming\sic-xe-assembler\include\pass2.h
+1557581681 e:\handasa\2\systems programming\sic-xe-assembler\include\pass2.h
 	<unordered_map>
 	<sstream>
 	"symValue.h"
@@ -162,7 +168,10 @@
 	<regex>
 	"ListingEntry.h"
 	"globals.h"
+	"Utilities.h"
 	<fstream>
+	"LiteralEntry.h"
+	"Parser.h"
 
 1557176802 source:e:\handasa\2\systems programming\sic-xe-assembler\src\instructionvalidator.cpp
 	"InstructionValidator.h"
@@ -171,18 +180,17 @@
 	"ListingEntry.h"
 	<string>
 
-1557176802 source:e:\handasa\2\systems programming\sic-xe-assembler\src\parser.cpp
+1557570259 source:e:\handasa\2\systems programming\sic-xe-assembler\src\parser.cpp
 	"Parser.h"
-	<algorithm>
 
-1557412441 source:e:\handasa\2\systems programming\sic-xe-assembler\src\pass1algorithm.cpp
+1557570259 source:e:\handasa\2\systems programming\sic-xe-assembler\src\pass1algorithm.cpp
 	"Pass1Algorithm.h"
 	<iostream>
 
-1557176802 source:e:\handasa\2\systems programming\sic-xe-assembler\src\symvalue.cpp
+1557511974 source:e:\handasa\2\systems programming\sic-xe-assembler\src\symvalue.cpp
 	"symValue.h"
 
-1557411732 source:e:\handasa\2\systems programming\sic-xe-assembler\src\pass2.cpp
+1557581828 source:e:\handasa\2\systems programming\sic-xe-assembler\src\pass2.cpp
 	"Pass2.h"
 	<iostream>
 
@@ -343,5 +351,45 @@
 	"symValue.h"
 
 1557526299 source:f:\k\faculty\2ndyear\2nd term\systems programming\project\project_repo\sic-xe-assembler\src\utilities.cpp
+	"Utilities.h"
+
+1557570259 source:e:\handasa\2\systems programming\sic-xe-assembler\assemble.cpp
+	<iostream>
+	<string>
+	"ListingEntry.h"
+	<unordered_map>
+	<unordered_set>
+	"Pass1Algorithm.h"
+	"symValue.h"
+	"Pass2.h"
+
+1557511974 e:\handasa\2\systems programming\sic-xe-assembler\include\utilities.h
+	<regex>
+	<vector>
+	<string>
+	<sstream>
+
+1557511974 e:\handasa\2\systems programming\sic-xe-assembler\include\file.h
+	<fstream>
+	<vector>
+	<ListingEntry.h>
+
+1557511974 e:\handasa\2\systems programming\sic-xe-assembler\include\expression.h
+	<string>
+	<globals.h>
+	<regex>
+	<unordered_map>
+	<symValue.h>
+
+1557570259 e:\handasa\2\systems programming\sic-xe-assembler\include\literalentry.h
+	<string>
+
+1557511974 source:e:\handasa\2\systems programming\sic-xe-assembler\src\expression.cpp
+	"Expression.h"
+
+1557570259 source:e:\handasa\2\systems programming\sic-xe-assembler\src\literalentry.cpp
+	"LiteralEntry.h"
+
+1557511974 source:e:\handasa\2\systems programming\sic-xe-assembler\src\utilities.cpp
 	"Utilities.h"
 
