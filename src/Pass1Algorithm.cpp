@@ -131,11 +131,12 @@ bool Pass1Algorithm::execute(string fileName, bool freeFormat) {
                 listingTable.push_back(entry);
                 for(auto &elem : literals){
                     if (elem[1] == 'X' || elem[1] == 'C' || elem[1] == 'x' || elem[1] == 'c'){
-                        entry.setOpCode("BYTE");
+                            entry.setOpCode("BYTE");
+                            entry.setOperand(elem.substr(1));
                     } else {
                         entry.setOpCode("WORD");
+                        entry.setOperand(elem.substr(3, elem.length() - 4));
                     }
-                    entry.setOperand(elem.substr(1));
                     entry.setLineNumber(++lineNumber);
                     entry.setIsLiteral(true);
                     entry.setLabel("");

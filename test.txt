@@ -10,6 +10,7 @@ FIRST    STL     RETADR
          LDA     DIFF
          LDA     #DIFF
          LDA     @DIFF
+         lda     =W'5'
 CLOOP    +JSUB   RDREC
     	 LDA     LENGTH
          COMP    #0
