@@ -357,7 +357,7 @@ void Pass2::writeListingFile(string fileName){
     file << s << endl;
     for(auto it = listingTable.begin(); it != listingTable.end(); it++) {
         ListingEntry entry = *it;
-        if (entry.getAddress() != ""){
+        if (entry.getAddress() != ""&&!entry.getIsLiteral()){
             s = "";
             if (!entry.getErrorFlag()){
                 string fl = entry.getFlags().to_string<char,std::string::traits_type,std::string::allocator_type>();
@@ -394,6 +394,17 @@ void Pass2::writeListingFile(string fileName){
                 break;
             }
         }
+        else if(entry.getIsLiteral()){
+            s="***";
+            padTo(s,10+s.length()-7);
+            s="literal"+s;
+            padTo(s,10+s.length()-entry.getObjectCode().length());
+            s=entry.getObjectCode()+s;
+            padTo(s,10+s.length()-entry.getAddress().length());
+            s=entry.getAddress()+s;
+            file<<s<<endl;
+            file<<endl;
+            }
     }
     if(successfullyAssembled){
         file << spaces << "***** S U C C E S S F U L L Y  A S S E M B L E D *****" << endl;

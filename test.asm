@@ -20,7 +20,7 @@ line no.    Address          Label          Mnemonic          Operands          
 19          002F                               J                 CLOOP             
 20          0032             ENDFIL            LDA               EOF               
 21          0035                               STA               BUFFER            
-22          0038                               LDA               #3                
+22          0038                               LDA               =w'3'             
 23          003B                               STA               LENGTH            
 24          003E                               +JSUB             WRREC             
 25          0042                               J                 @RETADR           
@@ -59,6 +59,7 @@ line no.    Address          Label          Mnemonic          Operands          
 58          009A             OUTPUT            BYTE              X'05'             
 59          009B                               END               FIRST             
 60          009B                               WORD              5                 
+61          009E                               WORD              3                 
                          *** P A S S   1   E N D E D   S U C C E S S F U L L Y ***
 
            S Y M B O L  T A B L E
@@ -87,6 +88,8 @@ line no.    Address          Label          Mnemonic          Operands          
                          **************************************************
                          ********** S t a r t  o f  P a s s  II ***********
 LC        Code      Label     Opcode    Operand     Flags
+
+                    literal   ***
 
 0000                COPY      START     0000        n=0 i=0 x=0   b=0 p=0 e=0
 
@@ -128,7 +131,7 @@ LC        Code      Label     Opcode    Operand     Flags
 
 0035      0F2021              STA       BUFFER      n=1 i=1 x=0   b=0 p=1 e=0
 
-0038      010003              LDA       #3          n=0 i=1 x=0   b=0 p=0 e=0
+0038      032063              LDA       =w'3'       n=1 i=1 x=0   b=0 p=1 e=0
 
 003B      0F2018              STA       LENGTH      n=1 i=1 x=0   b=0 p=1 e=0
 
@@ -147,6 +150,10 @@ LC        Code      Label     Opcode    Operand     Flags
 0056                LENGTH    RESW      1           n=0 i=0 x=0   b=0 p=0 e=0
 
 0059                BUFFER    RESB      1           n=0 i=0 x=0   b=0 p=0 e=0
+
+                    literal   ***
+
+                    literal   ***
 
 005A      B410      RDREC     CLEAR     X           n=0 i=0 x=0   b=0 p=0 e=0
 
@@ -200,6 +207,8 @@ LC        Code      Label     Opcode    Operand     Flags
 
 009B                          END       FIRST       n=0 i=0 x=0   b=0 p=0 e=0
 
-009B      000005              WORD      5           n=0 i=0 x=0   b=0 p=0 e=0
+009B      000005    literal   ***
+
+009E      000003    literal   ***
 
                          ***** S U C C E S S F U L L Y  A S S E M B L E D *****

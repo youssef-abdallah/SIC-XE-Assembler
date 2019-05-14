@@ -19,7 +19,7 @@ CLOOP    +JSUB   RDREC
          J       CLOOP
 ENDFIL   LDA     EOF
          STA     BUFFER
-         LDA     #3
+         LDA     =w'3'
          STA     LENGTH
          +JSUB   WRREC
          J       @RETADR
